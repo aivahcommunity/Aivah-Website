@@ -49,7 +49,7 @@ export function PerspectiveGrid({
                             key={i}
                             className="tile min-h-[1px] min-w-[1px] border border-teal-500/10 bg-transparent
                                        transition-colors duration-[1500ms] hover:duration-0
-                                       hover:bg-teal-500/30 hover:border-teal-400"
+                                       hover:bg-teal-200/30 hover:border-teal-200/5"
                         />
                     ))}
             </div>

@@ -8,6 +8,8 @@ import GlowCard from '@/components/ui/GlowCard'
 
 const categories = [
     { id: 'all', label: 'All Events', icon: Zap },
+    { id: 'workshop', label: 'Workshop', icon: BookOpen },
+    { id: 'meetup', label: 'Meetup', icon: Coffee },
 ]
 
 const events = [

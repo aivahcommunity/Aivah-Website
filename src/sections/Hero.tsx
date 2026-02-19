@@ -8,8 +8,8 @@ import FlipText from '@/components/ui/FlipText'
 import PerspectiveGrid from '@/components/ui/PerspectiveGrid'
 
 const stats = [
-    { label: 'Members', value: 200, suffix: '+', icon: Users },
-    { label: 'Events', value: 3, suffix: '+', icon: Calendar },
+    { label: 'Members', value: 150, suffix: '+', icon: Users },
+    { label: 'Events', value: 5, suffix: '+', icon: Calendar },
 ]
 
 function useCountUp(target: number, duration = 2000, start = false) {
@@ -129,7 +129,7 @@ const Hero: React.FC = () => {
                     initial={{ opacity: 0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.7, delay: 0.3 }}
-                    className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[1.05] mb-6"
+                    className="font-display text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.05] mb-6"
                 >
                     Where{' '}
                     <FlipText className="text-teal-400" duration={5} delay={0} loop={false}>Builders,</FlipText>
@@ -138,7 +138,7 @@ const Hero: React.FC = () => {
                     {' '}&{' '}
                     <FlipText className="text-pink-400" duration={5} delay={2} loop={false}>Dreamers</FlipText>
                     <br />
-                    <span className="text-white/80 text-5xl sm:text-6xl md:text-7xl lg:text-8xl">Converge.</span>
+                    <span className="text-white/80 text-4xl sm:text-5xl md:text-6xl">Converge.</span>
                 </motion.h1>
 
                 {/* Mission */}
@@ -189,7 +189,7 @@ const Hero: React.FC = () => {
                 transition={{ delay: 1.5 }}
                 className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
             >
-                <span className="text-white/30 text-xs tracking-widest uppercase">Scroll</span>
+
                 <motion.div
                     animate={{ y: [0, 8, 0] }}
                     transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}

@@ -14,7 +14,6 @@ const footerLinks = {
     Connect: [
         { label: 'Join Community', href: '#contact' },
         { label: 'Contact Us', href: '#contact' },
-        { label: 'Newsletter', href: '#contact' },
         { label: 'Partner With Us', href: '#contact' },
     ],
     Legal: [
@@ -25,7 +24,7 @@ const footerLinks = {
 }
 
 const socials = [
-    { icon: Github, href: '#', label: 'GitHub' },
+    { icon: Github, href: 'https://github.com/aivahcommunity', label: 'GitHub' },
     { icon: Twitter, href: 'https://x.com/Aivah___', label: 'Twitter' },
     { icon: Linkedin, href: '#', label: 'LinkedIn' },
     { icon: Instagram, href: 'https://www.instagram.com/aivah___/', label: 'Instagram' },

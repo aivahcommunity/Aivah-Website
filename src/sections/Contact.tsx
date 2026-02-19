@@ -111,33 +111,11 @@ const Contact: React.FC = () => {
                                     { letter: 'A', icon: <FaInstagram />, label: 'Instagram', href: 'https://www.instagram.com/aivah___/' },
                                     { letter: 'I', icon: <FaTwitter />, label: 'Twitter / X', href: 'https://x.com/Aivah___' },
                                     { letter: 'V', icon: <FaEnvelope />, label: 'Email', href: 'mailto:aivahcommunity@gmail.com' },
-                                    { letter: 'A', icon: <FaGithub />, label: 'GitHub', href: '#' },
+                                    { letter: 'A', icon: <FaGithub />, label: 'GitHub', href: 'https://github.com/aivahcommunity' },
                                     { letter: 'H', icon: <FaLinkedin />, label: 'LinkedIn', href: '#' },
                                 ]}
                                 className="justify-start"
                             />
-                        </div>
-
-                        {/* Newsletter */}
-                        <div className="p-5 rounded-2xl bg-gradient-to-br from-teal-500/10 to-purple-500/10 border border-teal-500/20">
-                            <h4 className="font-display font-bold text-white mb-1">Newsletter</h4>
-                            <p className="text-white/50 text-sm mb-4">Get event updates, resources, and community news — no spam.</p>
-                            <div className="flex gap-2">
-                                <input
-                                    type="email"
-                                    placeholder="your@email.com"
-                                    className="flex-1 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder-white/30
-                             focus:border-teal-500/50 focus:outline-none transition-all"
-                                />
-                                <motion.button
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.97 }}
-                                    className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-teal-500 to-purple-500 text-white text-sm font-semibold
-                             hover:shadow-[0_0_20px_rgba(255,79,216,0.4)] transition-all duration-300"
-                                >
-                                    Subscribe
-                                </motion.button>
-                            </div>
                         </div>
                     </motion.div>
 
