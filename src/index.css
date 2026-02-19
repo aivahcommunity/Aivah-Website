@@ -1,0 +1,216 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+@tailwind base;
+
+.font-aerospace {
+  font-family: 'Orbitron', sans-serif;
+}
+
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --teal: #1CA7C7;
+  --purple: #8E44FF;
+  --navy: #0F172A;
+  --light: #F8FAFC;
+  --pink: #FF4FD8;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #0F172A;
+  color: #F8FAFC;
+  overflow-x: hidden;
+}
+
+/* Gradient text utility */
+.gradient-text {
+  background: linear-gradient(135deg, #1CA7C7, #8E44FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-full {
+  background: linear-gradient(135deg, #1CA7C7, #8E44FF, #FF4FD8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Gradient text inside FlipText — applied per character so 3D transforms work */
+.flip-text-wrapper.gradient-text .flip-char,
+.flip-text-wrapper.gradient-text .word {
+  background: linear-gradient(135deg, #1CA7C7, #8E44FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.flip-text-wrapper.gradient-text-full .flip-char,
+.flip-text-wrapper.gradient-text-full .word {
+  background: linear-gradient(135deg, #1CA7C7, #8E44FF, #FF4FD8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(28, 167, 199, 0.15);
+}
+
+.glass-light {
+  background: rgba(248, 250, 252, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Gradient border */
+.gradient-border {
+  position: relative;
+  background: linear-gradient(#0F172A, #0F172A) padding-box,
+    linear-gradient(135deg, #1CA7C7, #8E44FF) border-box;
+  border: 1px solid transparent;
+}
+
+.gradient-border-pink {
+  position: relative;
+  background: linear-gradient(#0F172A, #0F172A) padding-box,
+    linear-gradient(135deg, #8E44FF, #FF4FD8) border-box;
+  border: 1px solid transparent;
+}
+
+/* Glow effects */
+.glow-teal {
+  box-shadow: 0 0 20px rgba(28, 167, 199, 0.4);
+}
+
+.glow-purple {
+  box-shadow: 0 0 20px rgba(142, 68, 255, 0.4);
+}
+
+.glow-pink {
+  box-shadow: 0 0 20px rgba(255, 79, 216, 0.5), 0 0 60px rgba(255, 79, 216, 0.2);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0F172A;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(#1CA7C7, #8E44FF);
+  border-radius: 3px;
+}
+
+/* Selection */
+::selection {
+  background: rgba(142, 68, 255, 0.4);
+  color: #F8FAFC;
+}
+
+/* Orb animation */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+  animation: float 8s ease-in-out infinite;
+}
+
+/* Input focus glow */
+input:focus,
+textarea:focus {
+  outline: none;
+}
+
+/* Section padding */
+.section-padding {
+  padding: 5rem 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding: 6rem 3rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .section-padding {
+    padding: 7rem 5rem;
+  }
+}
+
+/* FlipText animation */
+@keyframes flip-char-anim {
+
+  0%,
+  100% {
+    transform: rotateX(0deg);
+    opacity: 1;
+  }
+
+  30% {
+    transform: rotateX(-90deg);
+    opacity: 0;
+  }
+
+  50% {
+    transform: rotateX(90deg);
+    opacity: 0;
+  }
+
+  80% {
+    transform: rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+.flip-char {
+  animation: flip-char-anim var(--flip-duration, 2.2s) ease-in-out var(--flip-delay, 0s) var(--flip-iteration, infinite);
+  display: inline-block;
+  backface-visibility: hidden;
+}
+
+/* Marquee Animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+.animate-marquee-reverse {
+  animation: marquee 30s linear infinite reverse;
+}
+
+.pause-on-hover:hover .animate-marquee,
+.pause-on-hover:hover .animate-marquee-reverse {
+  animation-play-state: paused;
+}
