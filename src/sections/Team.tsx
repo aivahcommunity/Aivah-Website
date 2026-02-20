@@ -297,19 +297,7 @@ const Team: React.FC = () => {
                                 <ArrowRight size={16} />
                             </motion.button>
 
-                            {/* Dot indicators */}
-                            <div className="flex items-center gap-1.5 ml-2 flex-wrap max-w-[160px]">
-                                {members.map((_, i) => (
-                                    <button
-                                        key={i}
-                                        onClick={() => { setDirection(i > activeIndex ? 1 : -1); setActiveIndex(i) }}
-                                        className={`rounded-full transition-all duration-300 ${i === activeIndex
-                                            ? 'w-5 h-1.5 bg-gradient-to-r from-teal-500 to-purple-500'
-                                            : 'w-1.5 h-1.5 bg-white/20 hover:bg-white/40'
-                                            }`}
-                                    />
-                                ))}
-                            </div>
+
                         </div>
                     </div>
                 </div>

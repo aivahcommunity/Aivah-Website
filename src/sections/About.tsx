@@ -114,8 +114,8 @@ const About: React.FC = () => {
                         {/* Stats */}
                         <div className="grid grid-cols-2 gap-3">
                             {[
-                                { num: '200+', label: 'Members' },
-                                { num: '3+', label: 'Events' },
+                                { num: '150+', label: 'Members' },
+                                { num: '5+', label: 'Events' },
                             ].map((s) => (
                                 <div key={s.label} className="text-center p-5 rounded-xl bg-gradient-to-br from-teal-500/10 to-purple-500/10 border border-white/10">
                                     <div className="font-display text-3xl font-bold bg-gradient-to-r from-teal-400 to-purple-400 bg-clip-text text-transparent">{s.num}</div>

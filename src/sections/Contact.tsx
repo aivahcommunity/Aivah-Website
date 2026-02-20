@@ -57,39 +57,6 @@ const Contact: React.FC = () => {
                         transition={{ duration: 0.6 }}
                         className="space-y-8"
                     >
-                        {/* Quick join CTAs */}
-                        <div className="space-y-4">
-                            <h3 className="font-display text-2xl font-bold text-white">Join the Community</h3>
-                            <p className="text-white/50 leading-relaxed">
-                                The fastest way to get involved is to join our WhatsApp or Telegram group. Meet members, get event updates, and start collaborating today.
-                            </p>
-
-                            <div className="flex flex-col sm:flex-row gap-3">
-                                <motion.a
-                                    href="#"
-                                    whileHover={{ scale: 1.03, y: -2 }}
-                                    whileTap={{ scale: 0.97 }}
-                                    className="flex items-center gap-3 px-5 py-3 rounded-xl bg-green-500/15 border border-green-500/30 text-green-400
-                             hover:bg-green-500/25 hover:border-green-400/50 hover:shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-all duration-300"
-                                >
-                                    <MessageCircle size={18} />
-                                    <span className="font-semibold text-sm">Join WhatsApp</span>
-                                    <ArrowRight size={14} className="ml-auto" />
-                                </motion.a>
-
-                                <motion.a
-                                    href="#"
-                                    whileHover={{ scale: 1.03, y: -2 }}
-                                    whileTap={{ scale: 0.97 }}
-                                    className="flex items-center gap-3 px-5 py-3 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-400
-                             hover:bg-sky-500/25 hover:border-sky-400/50 hover:shadow-[0_0_20px_rgba(14,165,233,0.3)] transition-all duration-300"
-                                >
-                                    <Send size={18} />
-                                    <span className="font-semibold text-sm">Join Telegram</span>
-                                    <ArrowRight size={14} className="ml-auto" />
-                                </motion.a>
-                            </div>
-                        </div>
 
                         <div className="p-5 rounded-2xl glass border border-white/10">
                             <div className="flex items-center gap-3 mb-2">
