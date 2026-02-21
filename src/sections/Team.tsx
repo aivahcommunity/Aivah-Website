@@ -13,26 +13,12 @@ type Member = {
 }
 
 const teamData: Record<string, Member[]> = {
-    '2023': [
-        { name: 'Arjun Mehta', role: 'President', dept: 'Tech', avatar: 'AM' },
-        { name: 'Priya Sharma', role: 'Vice President', dept: 'Design', avatar: 'PS' },
-        { name: 'Karthik Rajan', role: 'Tech Lead', dept: 'Tech', avatar: 'KR' },
-        { name: 'Sneha Iyer', role: 'Community Manager', dept: 'Community', avatar: 'SI' },
-        { name: 'Dev Patel', role: 'Backend Developer', dept: 'Tech', avatar: 'DP' },
-        { name: 'Ananya Roy', role: 'UI Designer', dept: 'Design', avatar: 'AR' },
-        { name: 'Rahul Nair', role: 'Marketing Head', dept: 'Marketing', avatar: 'RN' },
-        { name: 'Meera Krishnan', role: 'Operations Lead', dept: 'Ops', avatar: 'MK' },
+    '2023':[
+        { name: 'N Anvitha Rao', role: 'President', dept: 'Tech', avatar: 'NA' },
     ],
+
     '2024': [
-        { name: 'Vikram Singh', role: 'President', dept: 'Tech', avatar: 'VS' },
-        { name: 'Aisha Khan', role: 'Vice President', dept: 'Community', avatar: 'AK' },
-        { name: 'Rohan Das', role: 'CTO', dept: 'Tech', avatar: 'RD' },
-        { name: 'Tanvi Gupta', role: 'Frontend Dev', dept: 'Tech', avatar: 'TG' },
-        { name: 'Siddharth M', role: 'AI/ML Lead', dept: 'Tech', avatar: 'SM' },
-        { name: 'Pooja Verma', role: 'Design Lead', dept: 'Design', avatar: 'PV' },
-        { name: 'Aryan Kapoor', role: 'Events Head', dept: 'Ops', avatar: 'AK' },
-        { name: 'Divya Nair', role: 'Content Lead', dept: 'Marketing', avatar: 'DN' },
-        { name: 'Nikhil Rao', role: 'DevOps Engineer', dept: 'Tech', avatar: 'NR' },
+        { name: 'Chaitanya', role: 'President', dept: 'Tech', avatar: 'C' },
     ],
     '2026': [
         { name: 'G. Akshitha', role: 'President', dept: 'Tech', avatar: 'GA' },
