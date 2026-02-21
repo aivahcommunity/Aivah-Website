@@ -65,8 +65,8 @@ const Contact: React.FC = () => {
                                 </div>
                                 <span className="text-white/60 text-sm font-medium">Official Email</span>
                             </div>
-                            <a href="mailto:aivahcommunity@gmail.com" className="text-teal-400 font-semibold hover:text-teal-300 transition-colors">
-                                aivahcommunity@gmail.com
+                            <a href="mailto:aivah.mrdu@gmail.com" className="text-teal-400 font-semibold hover:text-teal-300 transition-colors">
+                                aivah.mrdu@gmail.com
                             </a>
                         </div>
 
@@ -77,7 +77,7 @@ const Contact: React.FC = () => {
                                 items={[
                                     { letter: 'A', icon: <FaInstagram />, label: 'Instagram', href: 'https://www.instagram.com/aivah___/' },
                                     { letter: 'I', icon: <FaTwitter />, label: 'Twitter / X', href: 'https://x.com/Aivah___' },
-                                    { letter: 'V', icon: <FaEnvelope />, label: 'Email', href: 'mailto:aivahcommunity@gmail.com' },
+                                    { letter: 'V', icon: <FaEnvelope />, label: 'Email', href: 'mailto:aivah.mrdu@gmail.com' },
                                     { letter: 'A', icon: <FaGithub />, label: 'GitHub', href: 'https://github.com/aivahcommunity' },
                                     { letter: 'H', icon: <FaLinkedin />, label: 'LinkedIn', href: '#' },
                                 ]}

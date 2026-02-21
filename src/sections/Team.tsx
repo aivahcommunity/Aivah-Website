@@ -39,7 +39,7 @@ const teamData: Record<string, Member[]> = {
         { name: 'G. Likhitha', role: 'Executive Board', dept: 'Community', avatar: 'GL' },
         { name: 'V. Suresh', role: 'Technical', dept: 'Tech', avatar: 'VS' },
         { name: 'G. Sai Reddy', role: 'Technical', dept: 'Tech', avatar: 'GS' },
-        { name: 'H. Puttraj', role: 'Technical', dept: 'Tech', avatar: 'HP' },
+        { name: 'Puttaraj', role: 'Technical', dept: 'Tech', avatar: 'P' },
         { name: 'D. Sathwik', role: 'Technical', dept: 'Tech', avatar: 'DS' },
         { name: 'Md. Junedh', role: 'Technical', dept: 'Tech', avatar: 'MJ' },
         { name: 'B. Rohith', role: 'Technical', dept: 'Tech', avatar: 'BR' },

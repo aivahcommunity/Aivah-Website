@@ -203,11 +203,11 @@ textarea:focus {
 }
 
 .animate-marquee {
-  animation: marquee 30s linear infinite;
+  animation: marquee 80s linear infinite;
 }
 
 .animate-marquee-reverse {
-  animation: marquee 30s linear infinite reverse;
+  animation: marquee 80s linear infinite reverse;
 }
 
 .pause-on-hover:hover .animate-marquee,

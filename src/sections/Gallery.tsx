@@ -15,6 +15,22 @@ const galleryItems = [
     { id: 7, image: '/SnapInsta.to_467648989_445246474982094_7131533571752737006_n.jpg.jpeg' },
     { id: 8, image: '/SnapInsta.to_360033570_1296817264266919_2273054520135410229_n.jpg.jpeg' },
     { id: 9, image: '/SnapInsta.to_359975870_2248685108658943_5292081547263360414_n.jpg.jpeg' },
+    { id: 10, image: '/SnapInsta.to_359958219_621194976774728_711694628333189276_n.jpg.jpeg' },
+    { id: 11, image: '/SnapInsta.to_359802359_591294703129630_8143985486278478038_n.jpg.jpeg' },
+    { id: 12, image: '/SnapInsta.to_359756374_190503917073575_4440910184094150261_n.jpg.jpeg' },
+    { id: 13, image: '/SnapInsta.to_359709142_1227982097883755_3166832820061738022_n.jpg.jpeg' },
+    { id: 14, image: '/SnapInsta.to_359682640_235531279409434_6677246366915816111_n.jpg.jpeg' },
+    { id: 15, image: '/SnapInsta.to_359554294_605081071776410_3729259349196332126_n.jpg.jpeg' },
+    { id: 16, image: '/SnapInsta.to_359370518_293817619723080_3180655956759504199_n.jpg.jpeg' },
+    { id: 17, image: '/SnapInsta.to_610897935_17973170165992058_7388712593659648829_n.jpg' },
+    { id: 18, image: '/SnapInsta.to_610885035_17973170267992058_5964344157894214946_n.jpg' },
+    { id: 19, image: '/SnapInsta.to_610548734_17973170252992058_4499195614938485338_n.jpg' },
+    { id: 20, image: '/SnapInsta.to_610191902_17973170237992058_1433113765648449624_n.jpg' },
+    { id: 21, image: '/SnapInsta.to_610113476_17973170207992058_6671781981514856100_n.jpg' },
+    { id: 22, image: '/SnapInsta.to_609863487_17973170180992058_2880240776676507284_n.jpg' },
+    { id: 23, image: '/SnapInsta.to_609383581_17973170114992058_9156367133931295188_n.jpg' },
+    { id: 24, image: '/Zenith.jpeg' },
+    { id: 25, image: '/devigo.jpeg' },
 ]
 
 const GalleryItem: React.FC<{ item: typeof galleryItems[0]; onClick: (item: typeof galleryItems[0]) => void }> = ({ item, onClick }) => {
@@ -27,7 +43,7 @@ const GalleryItem: React.FC<{ item: typeof galleryItems[0]; onClick: (item: type
             onClick={() => onClick(item)}
             className="relative rounded-2xl overflow-hidden cursor-pointer h-[280px] w-[220px] shrink-0 mx-2 text-clip"
             whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.01 }}
         >
             {/* Image Background */}
             <div className="absolute inset-0 z-0">
@@ -71,8 +87,9 @@ const Gallery: React.FC = () => {
     const [selectedImage, setSelectedImage] = useState<typeof galleryItems[0] | null>(null)
 
     // Split items for two rows to create variety
-    const firstRow = galleryItems.slice(0, 5)
-    const secondRow = galleryItems.slice(5)
+    const half = Math.ceil(galleryItems.length / 2)
+    const firstRow = galleryItems.slice(0, half)
+    const secondRow = galleryItems.slice(half)
 
     return (
         <section id="gallery" className="relative bg-[#0a1020] overflow-hidden py-24">
@@ -95,7 +112,7 @@ const Gallery: React.FC = () => {
                 <MarqueeRow items={[...secondRow, ...firstRow]} direction="right" onItemClick={setSelectedImage} />
             </div>
 
-            {/* Video CTA */} 
+            {/* Video CTA */}
 
             {/* Lightbox Modal */}
             <AnimatePresence>

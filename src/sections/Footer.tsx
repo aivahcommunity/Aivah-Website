@@ -125,10 +125,10 @@ const Footer: React.FC = () => {
                         © {new Date().getFullYear()} Aivah Community. Built with ❤️ by students, for students.
                     </p>
                     <a
-                        href="mailto:aivahcommunity@gmail.com"
+                        href="mailto:aivah.mrdu@gmail.com"
                         className="text-white/30 text-xs hover:text-teal-400 transition-colors duration-200"
                     >
-                        aivahcommunity@gmail.com
+                        aivah.mrdu@gmail.com
                     </a>
                 </div>
             </div>
