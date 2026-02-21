@@ -224,7 +224,8 @@ const Hero: React.FC = () => {
                     initial={{ opacity: 0, scale: 0.9, x: 20 }}
                     animate={{ opacity: 1, scale: 1, x: 0 }}
                     transition={{ delay: 1.8, duration: 0.6, type: 'spring' }}
-                    className="absolute z-20 top-24 right-4 md:top-32 md:right-8 pointer-events-none"
+                    className="fixed z-[999] top-24 right-4 md:top-28 md:right-8 pointer-events-none"
+                    style={{ position: 'fixed' }}
                 >
                     <motion.div
                         animate={{ y: [0, -8, 0] }}
