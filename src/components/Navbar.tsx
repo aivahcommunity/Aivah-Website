@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Home, Info, Calendar, Users, Image, Mail, Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { TextRoll } from '@/components/ui/TextRoll'
 
 const navItems = [
     { label: 'Home', href: '#home', icon: Home },
@@ -86,6 +87,8 @@ const Navbar: React.FC = () => {
                                 <motion.a
                                     key={item.href}
                                     href={item.href}
+                                    initial="initial"
+                                    whileHover="hovered"
                                     onClick={(e) => { e.preventDefault(); handleNavClick(item.href) }}
                                     onMouseEnter={() => setHoveredIndex(index)}
                                     onMouseLeave={() => setHoveredIndex(null)}
@@ -118,7 +121,7 @@ const Navbar: React.FC = () => {
                                         'text-[10px] font-medium tracking-wide transition-colors duration-200',
                                         isActive ? 'text-teal-400' : isHovered ? 'text-white/90' : 'text-white/40'
                                     )}>
-                                        {item.label}
+                                        <TextRoll>{item.label}</TextRoll>
                                     </span>
 
                                     {/* Active underline */}

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Calendar, Clock, ArrowRight, Zap, Code, Palette, Coffee, BookOpen } from 'lucide-react'
 import SectionHeading from '@/components/ui/SectionHeading'
 import GlowCard from '@/components/ui/GlowCard'
+import { TextRoll } from '@/components/ui/TextRoll'
 
 const categories = [
     { id: 'all', label: 'All Events', icon: Zap },
@@ -145,14 +146,16 @@ const EventCard: React.FC<{ event: typeof events[0] & { image?: string }; index:
 
                 {event.status === 'upcoming' && (
                     <motion.button
-                        whileHover={{ scale: 1.02 }}
+                        initial="initial"
+                        whileHover="hovered"
+                        variants={{ hovered: { scale: 1.02 } }}
                         whileTap={{ scale: 0.98 }}
                         className="w-full py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2
                      bg-gradient-to-r from-teal-500/20 to-purple-500/20 border border-teal-500/30 text-teal-300
                      hover:from-teal-500/30 hover:to-purple-500/30 hover:border-teal-400/50 hover:shadow-[0_0_20px_rgba(255,79,216,0.3)]
                      transition-all duration-300"
                     >
-                        Register Now <ArrowRight size={14} />
+                        <TextRoll>Register Now</TextRoll> <ArrowRight size={14} />
                     </motion.button>
                 )}
             </div>
@@ -192,7 +195,9 @@ const Events: React.FC = () => {
                         <motion.button
                             key={cat.id}
                             onClick={() => setActiveCategory(cat.id)}
-                            whileHover={{ scale: 1.05 }}
+                            initial="initial"
+                            whileHover="hovered"
+                            variants={{ hovered: { scale: 1.05 } }}
                             whileTap={{ scale: 0.97 }}
                             className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${activeCategory === cat.id
                                 ? 'bg-gradient-to-r from-teal-500 to-purple-500 text-white shadow-[0_0_20px_rgba(28,167,199,0.4)]'
@@ -200,7 +205,7 @@ const Events: React.FC = () => {
                                 }`}
                         >
                             <cat.icon size={15} />
-                            {cat.label}
+                            <TextRoll>{cat.label}</TextRoll>
                         </motion.button>
                     ))}
                 </div>

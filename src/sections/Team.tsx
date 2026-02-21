@@ -4,6 +4,7 @@ import React, { useState, useMemo, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import SectionHeading from '@/components/ui/SectionHeading'
+import { TextRoll } from '@/components/ui/TextRoll'
 
 type Member = {
     name: string
@@ -13,7 +14,7 @@ type Member = {
 }
 
 const teamData: Record<string, Member[]> = {
-    '2023':[
+    '2023': [
         { name: 'N Anvitha Rao', role: 'President', dept: 'Tech', avatar: 'NA' },
     ],
 
@@ -153,6 +154,8 @@ const Team: React.FC = () => {
                             <motion.button
                                 key={year}
                                 onClick={() => handleYearChange(year)}
+                                initial="initial"
+                                whileHover="hovered"
                                 whileTap={{ scale: 0.97 }}
                                 className={`relative px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${activeYear === year ? 'text-white' : 'text-white/40 hover:text-white/70'}`}
                             >
@@ -163,7 +166,9 @@ const Team: React.FC = () => {
                                         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                                     />
                                 )}
-                                <span className="relative z-10">{year === '2026' ? '2025-26' : year}</span>
+                                <span className="relative z-10">
+                                    <TextRoll>{year === '2026' ? '2025-26' : year}</TextRoll>
+                                </span>
                             </motion.button>
                         ))}
                     </div>

@@ -3,7 +3,7 @@
 import React from 'react'
 import { motion, type MotionProps } from 'framer-motion'
 import { cn } from '@/lib/utils'
-
+import { TextRoll } from '@/components/ui/TextRoll'
 type AnimatedButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & MotionProps & {
     children?: React.ReactNode
     variant?: 'primary' | 'outline' | 'ghost'
@@ -43,6 +43,8 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
 
     return (
         <motion.button
+            initial="initial"
+            whileHover="hovered"
             {...(rest as MotionProps)}
             whileTap={whileTap}
             transition={transition}
@@ -63,7 +65,12 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
                     maskImage: 'none',
                 }}
             >
-                {children}
+                {React.Children.map(children, child => {
+                    if (typeof child === 'string' || typeof child === 'number') {
+                        return <TextRoll>{child.toString()}</TextRoll>;
+                    }
+                    return child;
+                })}
             </motion.span>
 
             {/* Shimmer border sweep */}
