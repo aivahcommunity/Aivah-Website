@@ -6,7 +6,7 @@ import { ArrowRight, Users, Calendar, Building2, Sparkles } from 'lucide-react'
 import AnimatedButton from '@/components/ui/AnimatedButton'
 import FlipText from '@/components/ui/FlipText'
 import PerspectiveGrid from '@/components/ui/PerspectiveGrid'
-
+import { events } from './Events'
 const stats = [
     { label: 'Members', value: 150, suffix: '+', icon: Users },
     { label: 'Events', value: 5, suffix: '+', icon: Calendar },
@@ -59,6 +59,27 @@ const Hero: React.FC = () => {
     const mouseY = useMotionValue(0)
     const springX = useSpring(mouseX, { stiffness: 30, damping: 20 })
     const springY = useSpring(mouseY, { stiffness: 30, damping: 20 })
+
+    const upcomingEvent = events.find(e => {
+        if (e.status !== 'upcoming') return false;
+
+        // Parse dates like "Mar 5-6, 2026" to "Mar 5, 2026" and check against current date
+        const dateMatch = e.date.match(/([a-zA-Z]+)\s+(\d+)(?:-\d+)?(?:,\s*(\d{4}))?/);
+        if (dateMatch) {
+            const [, month, day, year] = dateMatch;
+            const eventYear = year || new Date().getFullYear();
+            const startDate = new Date(`${month} ${day}, ${eventYear} 00:00:00`);
+            return new Date() < startDate;
+        }
+
+        // Fallback for normal dates
+        const date = new Date(e.date);
+        if (!isNaN(date.getTime())) {
+            return new Date() < date;
+        }
+
+        return true;
+    })
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -196,6 +217,40 @@ const Hero: React.FC = () => {
                     className="w-[1px] h-8 bg-gradient-to-b from-teal-500 to-transparent"
                 />
             </motion.div>
+
+            {/* Upcoming Event Announcement */}
+            {upcomingEvent && (
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9, x: 20 }}
+                    animate={{ opacity: 1, scale: 1, x: 0 }}
+                    transition={{ delay: 1.8, duration: 0.6, type: 'spring' }}
+                    className="absolute z-20 top-24 right-4 md:top-32 md:right-8 pointer-events-none"
+                >
+                    <motion.div
+                        animate={{ y: [0, -8, 0] }}
+                        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                        onClick={() => scrollToSection('events')}
+                        className="relative group cursor-pointer pointer-events-auto"
+                    >
+                        <div className="absolute -inset-0.5 bg-gradient-to-r from-teal-500 to-purple-500 rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
+                        <div className="relative flex items-center gap-3 bg-navy/80 backdrop-blur-md border border-white/10 p-3 pr-4 rounded-2xl hover:border-teal-500/30 transition-all">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-500/20 to-purple-500/20 flex items-center justify-center flex-shrink-0">
+                                <Sparkles className="text-teal-400 w-5 h-5 animate-pulse" />
+                            </div>
+                            <div>
+                                <div className="text-[10px] uppercase tracking-wider font-bold text-teal-400 mb-0.5 flex items-center gap-1.5">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />
+                                    Upcoming Event
+                                </div>
+                                <h4 className="text-white font-display font-medium text-sm line-clamp-1 pr-2">{upcomingEvent.title}</h4>
+                            </div>
+                            <div className="ml-1 w-7 h-7 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-teal-500/20 transition-all shrink-0">
+                                <ArrowRight size={14} className="text-white/40 group-hover:text-teal-400" />
+                            </div>
+                        </div>
+                    </motion.div>
+                </motion.div>
+            )}
         </section>
     )
 }

@@ -13,7 +13,7 @@ const categories = [
     { id: 'meetup', label: 'Meetup', icon: Coffee },
 ]
 
-const events = [
+export const events = [
     {
         id: 1,
         title: 'Zenix',
