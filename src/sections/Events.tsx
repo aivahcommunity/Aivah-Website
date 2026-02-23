@@ -2,10 +2,30 @@
 
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Calendar, Clock, ArrowRight, Zap, Code, Palette, Coffee, BookOpen } from 'lucide-react'
+import { Calendar, Clock, ArrowRight, Zap, Code, Palette, Coffee, BookOpen, X } from 'lucide-react'
 import SectionHeading from '@/components/ui/SectionHeading'
 import GlowCard from '@/components/ui/GlowCard'
 import { TextRoll } from '@/components/ui/TextRoll'
+
+export type AivahEvent = {
+    id: number
+    category?: string
+    title: string
+    desc: string
+    date: string
+    time: string
+    status: 'upcoming' | 'past'
+    tag: string
+    tagColor: string
+    gradient: string
+    image?: string
+    detailedInfo?: {
+        whatsNewImage?: string
+        posterImage?: string
+        chiefGuests?: { name: string; role: string; image: string }[]
+        workshops?: { title: string; image: string; link: string; resourceLink: string; resourceName: string }[]
+    }
+}
 
 const categories = [
     { id: 'all', label: 'All Events', icon: Zap },
@@ -13,7 +33,7 @@ const categories = [
     { id: 'meetup', label: 'Meetup', icon: Coffee },
 ]
 
-export const events = [
+export const events: AivahEvent[] = [
     {
         id: 1,
         title: 'Zenix',
@@ -66,36 +86,73 @@ export const events = [
         id: 5,
         category: 'Meet-Up',
         title: 'Zenith',
-        desc: 'Influencers Meet-Up',
+        desc: 'Zenith, hosted by the AIVAH Community, is a platform where creators, innovators, and visionaries unite to share insights and foster collaborations.',
         date: 'Nov 2024',
         time: '',
         status: 'past',
         tag: 'Completed',
         tagColor: 'from-slate-500 to-slate-600',
         gradient: 'from-slate-500/10 to-slate-600/10',
-        image: '/events/Zenith.jpeg',
+        image: '/2024 team/zenith/zenith.jpg',
+        detailedInfo: {
+            whatsNewImage: '/2024 team/zenith/zenith.jpg',
+            posterImage: '/2024 team/zenith/zenith.jpg',
+            chiefGuests: [
+                { name: 'Eshwarbolegar', role: 'Fitness Influencer', image: '/2024 team/zenith/Eshwarbolegar.jpg' },
+                { name: 'Code with Swaroop', role: 'Tech Influencer', image: '/2024 team/zenith/swaroop.jpg' },
+                { name: 'Gowrav Reddy', role: 'Entrepreneur', image: '/2024 team/zenith/Gowravreddy.jpg' },
+            ]
+        }
     }, {
         id: 7,
         category: 'workshop',
         title: 'Devigo',
-        desc: 'AWS,Prompt Engineering and DSA Workshop',
+        desc: 'DEVIGO— Develop, Innovate, Go—is dedicated to empowering creators and thinkers to turn ideas into reality.',
         date: 'Jan 2026',
         time: '',
         status: 'past',
         tag: 'Completed',
         tagColor: 'from-slate-500 to-slate-600',
         gradient: 'from-slate-500/10 to-slate-600/10',
-        image: '/events/devigo.jpeg',
+        image: '/2024 team/devigo/devigo poster.jpg',
+        detailedInfo: {
+            posterImage: '/2024 team/devigo/devigo poster.jpg',
+            workshops: [
+                {
+                    title: 'DSA using C',
+                    image: '/2024 team/devigo/DSA.jpg',
+                    link: 'https://forms.gle/fgtEaxhaUVVE1AvX9',
+                    resourceLink: 'https://drive.google.com/drive/folders/1Vj5r2pY7pCWfolF7BGDLEwpSebLoSYnu',
+                    resourceName: 'DSA using C'
+                },
+                {
+                    title: 'Prompt Engineering',
+                    image: '/2024 team/devigo/prompt.jpg',
+                    link: 'https://forms.gle/fgtEaxhaUVVE1AvX9',
+                    resourceLink: 'https://drive.google.com/drive/folders/1O9mJIsr1Ygq0h6qDcijRG4paWzvkXHwE',
+                    resourceName: 'Prompt Engineering'
+                },
+                {
+                    title: 'Devops & AWS',
+                    image: '/2024 team/devigo/AWS.jpg',
+                    link: 'https://forms.gle/fgtEaxhaUVVE1AvX9',
+                    resourceLink: 'https://drive.google.com/drive/folders/15Qtacqo3O6EFa3TstB6bVpGw3l3SksjY',
+                    resourceName: 'Devops & AWS'
+                }
+            ]
+        }
     }
 ]
 
-const EventCard: React.FC<{ event: typeof events[0] & { image?: string }; index: number }> = ({ event, index }) => (
+const EventCard: React.FC<{ event: AivahEvent; index: number; onClick: () => void }> = ({ event, index, onClick }) => (
     <motion.div
         layout
+        onClick={onClick}
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95 }}
         transition={{ duration: 0.4, delay: index * 0.07 }}
+        className={event.detailedInfo ? "cursor-pointer" : ""}
     >
         <GlowCard
             glowColor={event.status === 'upcoming' ? 'teal' : 'purple'}
@@ -165,6 +222,7 @@ const EventCard: React.FC<{ event: typeof events[0] & { image?: string }; index:
 
 const Events: React.FC = () => {
     const [activeCategory, setActiveCategory] = useState('all')
+    const [selectedEvent, setSelectedEvent] = useState<AivahEvent | null>(null)
 
     const filtered = activeCategory === 'all'
         ? events
@@ -220,7 +278,7 @@ const Events: React.FC = () => {
                         <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
                             <AnimatePresence mode="popLayout">
                                 {upcoming.map((event, i) => (
-                                    <EventCard key={event.id} event={event} index={i} />
+                                    <EventCard key={event.id} event={event} index={i} onClick={() => event.detailedInfo && setSelectedEvent(event)} />
                                 ))}
                             </AnimatePresence>
                         </motion.div>
@@ -237,12 +295,91 @@ const Events: React.FC = () => {
                         <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             <AnimatePresence mode="popLayout">
                                 {past.map((event, i) => (
-                                    <EventCard key={event.id} event={event} index={i} />
+                                    <EventCard key={event.id} event={event} index={i} onClick={() => event.detailedInfo && setSelectedEvent(event)} />
                                 ))}
                             </AnimatePresence>
                         </motion.div>
                     </div>
                 )}
+                {/* Modal for Event Details */}
+                <AnimatePresence>
+                    {selectedEvent && selectedEvent.detailedInfo && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+                            onClick={() => setSelectedEvent(null)}
+                        >
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                                className="bg-navy border border-white/10 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto relative p-6 sm:p-10 shadow-2xl custom-scrollbar"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <button
+                                    onClick={() => setSelectedEvent(null)}
+                                    className="absolute top-4 right-4 p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors z-10"
+                                >
+                                    <X size={20} />
+                                </button>
+
+                                <h2 className="text-3xl sm:text-4xl font-display font-bold text-white mb-2">{selectedEvent.title}</h2>
+                                <p className="text-lg text-white/70 mb-8">{selectedEvent.desc}</p>
+
+                                {selectedEvent.detailedInfo.posterImage && (
+                                    <div className="mb-10">
+                                        <img src={selectedEvent.detailedInfo.posterImage} alt={`${selectedEvent.title} Poster`} className="w-full md:w-3/4 lg:w-2/3 mx-auto rounded-xl shadow-lg border border-white/10" />
+                                    </div>
+                                )}
+
+                                {selectedEvent.detailedInfo.chiefGuests && (
+                                    <div>
+                                        <h3 className="text-2xl font-semibold text-white mb-4 text-center">Chief Guests</h3>
+                                        <p className="text-center text-white/60 mb-8 max-w-2xl mx-auto">
+                                            We are thrilled to introduce influential speakers who will inspire and engage as we explore the future of technology together.
+                                        </p>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                            {selectedEvent.detailedInfo.chiefGuests.map((guest, idx) => (
+                                                <div key={idx} className="text-center p-4 rounded-xl glass border border-white/10 hover:bg-white/5 transition-colors">
+                                                    <img src={guest.image} alt={guest.name} className="w-full h-56 object-cover rounded-lg shadow-md mb-4" />
+                                                    <h4 className="text-xl font-bold text-white mb-1">{guest.name}</h4>
+                                                    <p className="text-teal-400 text-sm font-semibold">{guest.role}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {selectedEvent.detailedInfo.workshops && (
+                                    <div className="mt-12 mb-8">
+                                        <h3 className="text-3xl font-display font-semibold text-white mb-4 text-center">Hackathons & Workshops</h3>
+                                        <p className="text-center text-white/60 mb-8 max-w-2xl mx-auto">
+                                            Hackathons are events where programmers, designers, and developers collaborate intensively to solve problems. Check out our resources and exams below!
+                                        </p>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                                            {selectedEvent.detailedInfo.workshops.map((workshop, idx) => (
+                                                <div key={idx} className="bg-white/5 border border-white/10 rounded-2xl p-5 hover:bg-white/10 transition-colors flex flex-col items-center">
+                                                    <a href={workshop.link} target="_blank" rel="noopener noreferrer" className="w-full block overflow-hidden rounded-lg mb-4">
+                                                        <img src={workshop.image} alt={workshop.title} className="w-full h-48 object-cover object-top hover:scale-110 transition-transform duration-700" />
+                                                    </a>
+                                                    <h4 className="text-xl font-bold text-white mb-2 text-center">{workshop.title}</h4>
+                                                    <p className="text-white/60 text-sm mb-6 text-center">
+                                                        Resource - <a href={workshop.resourceLink} target="_blank" rel="noopener noreferrer" className="text-teal-400 hover:text-teal-300 underline underline-offset-4">{workshop.resourceName}</a>
+                                                    </p>
+                                                    <a href={workshop.link} target="_blank" rel="noopener noreferrer" className="mt-auto w-full bg-gradient-to-r from-teal-500/20 to-cyan-500/20 hover:from-teal-500/40 hover:to-cyan-500/40 border border-teal-500/50 text-teal-300 py-2.5 px-4 rounded-xl text-center transition-all text-sm font-semibold shadow-lg shadow-teal-500/10">
+                                                        Exam Link {idx + 1}
+                                                    </a>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </section>
     )

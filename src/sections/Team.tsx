@@ -13,14 +13,32 @@ type Member = {
     avatar: string
 }
 
-const teamData: Record<string, Member[]> = {
+const combinedPhotos: Record<string, string[]> = {
     '2023': [
-        { name: 'N Anvitha Rao', role: 'President', dept: 'Tech', avatar: 'NA' },
+        '/2023 team/SnapInsta.to_440652129_807954387366522_6654470013083947613_n.jpg',
+        '/2023 team/SnapInsta.to_440656371_814252910558739_5125221242916162226_n.jpg',
+        '/2023 team/SnapInsta.to_440660165_1838386093251729_2962630681208598365_n.jpg',
+        '/2023 team/SnapInsta.to_440666034_953939853106903_9147263138721894239_n.jpg',
+        '/2023 team/SnapInsta.to_440683623_1552960145247430_1078725235573752211_n.jpg'
     ],
-
     '2024': [
-        { name: 'Chaitanya', role: 'President', dept: 'Tech', avatar: 'C' },
-    ],
+        '/2024 team/SnapInsta.to_464470091_979568767279258_8581328207408311337_n.jpg',
+        '/2024 team/SnapInsta.to_465687833_1098970298619389_3347833645681731293_n.jpg',
+        '/2024 team/SnapInsta.to_466381578_1262725444761285_5712770959385586028_n.jpg',
+        '/2024 team/SnapInsta.to_466429268_921346359928675_8163916616126475993_n.jpg',
+        '/2024 team/SnapInsta.to_466578361_1819024828846702_5829978496907981579_n.jpg',
+        '/2024 team/SnapInsta.to_466590677_553785860735249_1738286278028387752_n.jpg',
+        '/2024 team/SnapInsta.to_466611616_575376461842260_4395769284069570384_n.jpg',
+        '/2024 team/SnapInsta.to_466725615_447717221680893_3217104751884780078_n.jpg',
+        '/2024 team/SnapInsta.to_466734414_975412197968662_4506773317879141555_n.jpg',
+        '/2024 team/SnapInsta.to_466934388_588623333690699_4067233674780902626_n.jpg',
+        '/2024 team/SnapInsta.to_466938384_922080283217080_2751326796062238703_n.jpg',
+        '/2024 team/SnapInsta.to_466953818_498868956521981_1370109835215747470_n.jpg',
+        '/2024 team/SnapInsta.to_467025896_498011943390954_3506017938332350544_n.jpg'
+    ]
+}
+
+const teamData: Record<string, Member[]> = {
     '2026': [
         { name: 'G. Akshitha', role: 'President', dept: 'Tech', avatar: 'GA' },
         { name: 'B. Pranay', role: 'Vice President', dept: 'Community', avatar: 'BP' },
@@ -97,29 +115,32 @@ const Team: React.FC = () => {
     const [paused, setPaused] = useState(false)
     const [slideKey, setSlideKey] = useState(0)
 
-    const members = teamData[activeYear]
-    const activeItem = members[activeIndex]
+    const members = teamData[activeYear] || []
+    const photos = combinedPhotos[activeYear] || []
+    const isPhotoMode = photos.length > 0
+    const itemCount = isPhotoMode ? photos.length : members.length
+    const activeItem = !isPhotoMode ? members[activeIndex] : null
 
     // Auto-play — pauses on hover
     useEffect(() => {
-        if (paused) return
+        if (paused || itemCount === 0) return
         const id = setInterval(() => {
             setDirection(1)
-            setActiveIndex((prev) => (prev + 1) % members.length)
+            setActiveIndex((prev) => (prev + 1) % itemCount)
             setSlideKey((k) => k + 1)
         }, 3000)
         return () => clearInterval(id)
-    }, [members.length, activeYear, paused])
+    }, [itemCount, activeYear, paused])
 
     const handleNext = () => {
         setDirection(1)
-        setActiveIndex((prev) => (prev + 1) % members.length)
+        setActiveIndex((prev) => (prev + 1) % itemCount)
         setSlideKey((k) => k + 1)
     }
 
     const handlePrev = () => {
         setDirection(-1)
-        setActiveIndex((prev) => (prev - 1 + members.length) % members.length)
+        setActiveIndex((prev) => (prev - 1 + itemCount) % itemCount)
         setSlideKey((k) => k + 1)
     }
 
@@ -129,7 +150,7 @@ const Team: React.FC = () => {
         setDirection(1)
     }
 
-    const deptStyle = deptColors[activeItem.dept] || deptColors['Tech']
+    const deptStyle = activeItem ? (deptColors[activeItem.dept] || deptColors['Tech']) : ''
     const gradIdx = activeIndex % avatarGradients.length
 
     return (
@@ -181,62 +202,105 @@ const Team: React.FC = () => {
                 >
                     {/* Stacked card deck — hover pauses auto-play */}
                     <div
-                        className="relative w-52 h-64 flex-shrink-0"
+                        className={`relative flex-shrink-0 ${isPhotoMode ? 'w-full max-w-sm sm:max-w-md h-64 sm:h-80' : 'w-52 h-64'}`}
                         onMouseEnter={() => setPaused(true)}
                         onMouseLeave={() => setPaused(false)}
                     >
                         <AnimatePresence custom={direction}>
-                            {members.map((member, index) => {
-                                const isActive = index === activeIndex
-                                const offset = index - activeIndex
-                                const rot = rotations[index % rotations.length]
-                                const gradI = index % avatarGradients.length
+                            {isPhotoMode
+                                ? photos.map((photo, index) => {
+                                    const isActive = index === activeIndex
+                                    const offset = index - activeIndex
+                                    const rot = rotations[index % rotations.length]
 
-                                return (
-                                    <motion.div
-                                        key={`${activeYear}-${index}`}
-                                        className="absolute inset-0 w-full h-full rounded-2xl border border-white/15 shadow-2xl flex flex-col items-center justify-center gap-3 p-5"
-                                        style={{ backgroundColor: '#0c1628' }}
-                                        initial={{
-                                            x: offset * 15,
-                                            y: Math.abs(offset) * 6,
-                                            z: -150 * Math.abs(offset),
-                                            scale: 0.85 - Math.abs(offset) * 0.04,
-                                            rotateZ: rot,
-                                            opacity: isActive ? 1 : Math.abs(offset) > 3 ? 0 : 0.55,
-                                            zIndex: 10 - Math.abs(offset),
-                                        }}
-                                        animate={isActive ? {
-                                            x: [offset * 15, direction === 1 ? -200 : 200, 0],
-                                            y: [Math.abs(offset) * 6, 0, 0],
-                                            z: [-200, 150, 250],
-                                            scale: [0.85, 1.05, 1],
-                                            rotateZ: [rot, direction === 1 ? -5 : 5, 0],
-                                            opacity: 1,
-                                            zIndex: 100,
-                                        } : {
-                                            x: offset * 15,
-                                            y: Math.abs(offset) * 6,
-                                            z: -150 * Math.abs(offset),
-                                            rotateZ: rot,
-                                            scale: 0.85 - Math.abs(offset) * 0.04,
-                                            opacity: Math.abs(offset) > 3 ? 0 : 0.55,
-                                            zIndex: 10 - Math.abs(offset),
-                                        }}
-                                        transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-                                    >
-                                        <div className={`w-16 h-16 rounded-xl flex items-center justify-center font-bold text-white text-xl bg-gradient-to-br ${avatarGradients[gradI]}`}>
-                                            {member.avatar}
-                                        </div>
-                                        {isActive && (
-                                            <div className="text-center">
-                                                <p className="text-white font-bold text-sm leading-tight">{member.name}</p>
-                                                <p className="text-white/50 text-xs mt-0.5">{member.role}</p>
+                                    return (
+                                        <motion.div
+                                            key={`${activeYear}-photo-${index}`}
+                                            className="absolute inset-0 w-full h-full rounded-2xl border border-white/15 shadow-2xl overflow-hidden"
+                                            style={{ backgroundColor: '#0c1628' }}
+                                            initial={{
+                                                x: offset * 30,
+                                                y: Math.abs(offset) * 10,
+                                                z: -200 * Math.abs(offset),
+                                                scale: 0.9 - Math.abs(offset) * 0.05,
+                                                rotateZ: rot,
+                                                opacity: isActive ? 1 : Math.abs(offset) > 3 ? 0 : 0.4,
+                                                zIndex: 10 - Math.abs(offset),
+                                            }}
+                                            animate={isActive ? {
+                                                x: [offset * 30, direction === 1 ? -250 : 250, 0],
+                                                y: [Math.abs(offset) * 10, 0, 0],
+                                                z: [-300, 200, 300],
+                                                scale: [0.9, 1.05, 1],
+                                                rotateZ: [rot, direction === 1 ? -6 : 6, 0],
+                                                opacity: 1,
+                                                zIndex: 100,
+                                            } : {
+                                                x: offset * 30,
+                                                y: Math.abs(offset) * 10,
+                                                z: -200 * Math.abs(offset),
+                                                rotateZ: rot,
+                                                scale: 0.9 - Math.abs(offset) * 0.05,
+                                                opacity: Math.abs(offset) > 3 ? 0 : 0.4,
+                                                zIndex: 10 - Math.abs(offset),
+                                            }}
+                                            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+                                        >
+                                            <img src={photo} alt={`${activeYear} Team Photo ${index + 1}`} className="w-full h-full object-cover" />
+                                        </motion.div>
+                                    )
+                                })
+                                : members.map((member, index) => {
+                                    const isActive = index === activeIndex
+                                    const offset = index - activeIndex
+                                    const rot = rotations[index % rotations.length]
+                                    const gradI = index % avatarGradients.length
+
+                                    return (
+                                        <motion.div
+                                            key={`${activeYear}-${index}`}
+                                            className="absolute inset-0 w-full h-full rounded-2xl border border-white/15 shadow-2xl flex flex-col items-center justify-center gap-3 p-5"
+                                            style={{ backgroundColor: '#0c1628' }}
+                                            initial={{
+                                                x: offset * 15,
+                                                y: Math.abs(offset) * 6,
+                                                z: -150 * Math.abs(offset),
+                                                scale: 0.85 - Math.abs(offset) * 0.04,
+                                                rotateZ: rot,
+                                                opacity: isActive ? 1 : Math.abs(offset) > 3 ? 0 : 0.55,
+                                                zIndex: 10 - Math.abs(offset),
+                                            }}
+                                            animate={isActive ? {
+                                                x: [offset * 15, direction === 1 ? -200 : 200, 0],
+                                                y: [Math.abs(offset) * 6, 0, 0],
+                                                z: [-200, 150, 250],
+                                                scale: [0.85, 1.05, 1],
+                                                rotateZ: [rot, direction === 1 ? -5 : 5, 0],
+                                                opacity: 1,
+                                                zIndex: 100,
+                                            } : {
+                                                x: offset * 15,
+                                                y: Math.abs(offset) * 6,
+                                                z: -150 * Math.abs(offset),
+                                                rotateZ: rot,
+                                                scale: 0.85 - Math.abs(offset) * 0.04,
+                                                opacity: Math.abs(offset) > 3 ? 0 : 0.55,
+                                                zIndex: 10 - Math.abs(offset),
+                                            }}
+                                            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+                                        >
+                                            <div className={`w-16 h-16 rounded-xl flex items-center justify-center font-bold text-white text-xl bg-gradient-to-br ${avatarGradients[gradI]}`}>
+                                                {member.avatar}
                                             </div>
-                                        )}
-                                    </motion.div>
-                                )
-                            })}
+                                            {isActive && (
+                                                <div className="text-center">
+                                                    <p className="text-white font-bold text-sm leading-tight">{member.name}</p>
+                                                    <p className="text-white/50 text-xs mt-0.5">{member.role}</p>
+                                                </div>
+                                            )}
+                                        </motion.div>
+                                    )
+                                })}
                         </AnimatePresence>
                     </div>
 
@@ -244,7 +308,7 @@ const Team: React.FC = () => {
                     <div className="flex flex-col gap-6 max-w-xs w-full">
                         {/* Counter */}
                         <p className="font-mono text-sm text-white/40 text-right">
-                            {activeIndex + 1} / {members.length}
+                            {activeIndex + 1} / {itemCount}
                         </p>
 
                         {/* Active member details — slideKey forces re-mount on every change */}
@@ -257,15 +321,25 @@ const Team: React.FC = () => {
                                 transition={{ duration: 0.35 }}
                                 className="flex flex-col gap-3"
                             >
-                                {activeItem.role === 'President' && (
-                                    <span className="inline-flex w-fit px-3 py-0.5 rounded-full text-[10px] font-bold bg-gradient-to-r from-yellow-400 to-orange-400 text-black tracking-wide">
-                                        👑 President
-                                    </span>
+                                {!isPhotoMode && activeItem ? (
+                                    <>
+                                        {activeItem.role === 'President' && (
+                                            <span className="inline-flex w-fit px-3 py-0.5 rounded-full text-[10px] font-bold bg-gradient-to-r from-yellow-400 to-orange-400 text-black tracking-wide">
+                                                👑 President
+                                            </span>
+                                        )}
+                                        <h3 className="font-display text-3xl font-bold text-white leading-tight">
+                                            {activeItem.name}
+                                        </h3>
+                                        <p className="text-white/50 text-base">{activeItem.role}</p>
+                                    </>
+                                ) : (
+                                    <>
+                                        <h3 className="font-display text-3xl font-bold text-white leading-tight">
+                                            {activeYear} Team
+                                        </h3>
+                                    </>
                                 )}
-                                <h3 className="font-display text-3xl font-bold text-white leading-tight">
-                                    {activeItem.name}
-                                </h3>
-                                <p className="text-white/50 text-base">{activeItem.role}</p>
                             </motion.div>
                         </AnimatePresence>
 

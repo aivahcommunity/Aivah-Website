@@ -31,6 +31,8 @@ const galleryItems = [
     { id: 23, image: '/SnapInsta.to_609383581_17973170114992058_9156367133931295188_n.jpg' },
     { id: 24, image: '/Zenith.jpeg' },
     { id: 25, image: '/devigo.jpeg' },
+    { id: 26, image: '/WhatsApp Image 2026-02-23 at 3.07.02 PM.jpeg' },
+    { id: 27, image: '/WhatsApp Image 2026-02-23 at 3.07.15 PM.jpeg' },
 ]
 
 const GalleryItem: React.FC<{ item: typeof galleryItems[0]; onClick: (item: typeof galleryItems[0]) => void }> = ({ item, onClick }) => {
