@@ -19,6 +19,7 @@ export type AivahEvent = {
     tagColor: string
     gradient: string
     image?: string
+    registrationLink?: string
     detailedInfo?: {
         whatsNewImage?: string
         posterImage?: string
@@ -44,6 +45,7 @@ export const events: AivahEvent[] = [
         tag: 'Community Event',
         tagColor: 'from-pink-500 to-purple-500',
         gradient: 'from-teal-500/20 to-purple-500/20',
+        registrationLink: 'https://docs.google.com/forms/d/e/1FAIpQLSdNJDObFszUlWLF3oC7jlGDcm3-8zXDiLJkbn9gXu_ViybZhw/viewform',
     },
     {
         id: 2,
@@ -202,7 +204,10 @@ const EventCard: React.FC<{ event: AivahEvent; index: number; onClick: () => voi
 
 
                 {event.status === 'upcoming' && (
-                    <motion.button
+                    <motion.a
+                        href={event.registrationLink || '#'}
+                        target={event.registrationLink ? '_blank' : undefined}
+                        rel={event.registrationLink ? 'noopener noreferrer' : undefined}
                         initial="initial"
                         whileHover="hovered"
                         variants={{ hovered: { scale: 1.02 } }}
@@ -213,7 +218,7 @@ const EventCard: React.FC<{ event: AivahEvent; index: number; onClick: () => voi
                      transition-all duration-300"
                     >
                         <TextRoll>Register Now</TextRoll> <ArrowRight size={14} />
-                    </motion.button>
+                    </motion.a>
                 )}
             </div>
         </GlowCard>
