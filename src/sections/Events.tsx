@@ -306,86 +306,87 @@ const Events: React.FC = () => {
                         </motion.div>
                     </div>
                 )}
-                {/* Modal for Event Details */}
-                <AnimatePresence>
-                    {selectedEvent && selectedEvent.detailedInfo && (
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-                            onClick={() => setSelectedEvent(null)}
-                        >
-                            <motion.div
-                                initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                                animate={{ opacity: 1, scale: 1, y: 0 }}
-                                exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                                className="bg-navy border border-white/10 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto relative p-6 sm:p-10 shadow-2xl custom-scrollbar"
-                                onClick={(e) => e.stopPropagation()}
-                            >
-                                <button
-                                    onClick={() => setSelectedEvent(null)}
-                                    className="absolute top-4 right-4 p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors z-10"
-                                >
-                                    <X size={20} />
-                                </button>
-
-                                <h2 className="text-3xl sm:text-4xl font-display font-bold text-white mb-2">{selectedEvent.title}</h2>
-                                <p className="text-lg text-white/70 mb-8">{selectedEvent.desc}</p>
-
-                                {selectedEvent.detailedInfo.posterImage && (
-                                    <div className="mb-10">
-                                        <img src={selectedEvent.detailedInfo.posterImage} alt={`${selectedEvent.title} Poster`} className="w-full md:w-3/4 lg:w-2/3 mx-auto rounded-xl shadow-lg border border-white/10" />
-                                    </div>
-                                )}
-
-                                {selectedEvent.detailedInfo.chiefGuests && (
-                                    <div>
-                                        <h3 className="text-2xl font-semibold text-white mb-4 text-center">Chief Guests</h3>
-                                        <p className="text-center text-white/60 mb-8 max-w-2xl mx-auto">
-                                            We are thrilled to introduce influential speakers who will inspire and engage as we explore the future of technology together.
-                                        </p>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                            {selectedEvent.detailedInfo.chiefGuests.map((guest, idx) => (
-                                                <div key={idx} className="text-center p-4 rounded-xl glass border border-white/10 hover:bg-white/5 transition-colors">
-                                                    <img src={guest.image} alt={guest.name} className="w-full h-56 object-cover rounded-lg shadow-md mb-4" />
-                                                    <h4 className="text-xl font-bold text-white mb-1">{guest.name}</h4>
-                                                    <p className="text-teal-400 text-sm font-semibold">{guest.role}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-
-                                {selectedEvent.detailedInfo.workshops && (
-                                    <div className="mt-12 mb-8">
-                                        <h3 className="text-3xl font-display font-semibold text-white mb-4 text-center">Hackathons & Workshops</h3>
-                                        <p className="text-center text-white/60 mb-8 max-w-2xl mx-auto">
-                                            Hackathons are events where programmers, designers, and developers collaborate intensively to solve problems. Check out our resources and exams below!
-                                        </p>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                                            {selectedEvent.detailedInfo.workshops.map((workshop, idx) => (
-                                                <div key={idx} className="bg-white/5 border border-white/10 rounded-2xl p-5 hover:bg-white/10 transition-colors flex flex-col items-center">
-                                                    <a href={workshop.link} target="_blank" rel="noopener noreferrer" className="w-full block overflow-hidden rounded-lg mb-4">
-                                                        <img src={workshop.image} alt={workshop.title} className="w-full h-48 object-cover object-top hover:scale-110 transition-transform duration-700" />
-                                                    </a>
-                                                    <h4 className="text-xl font-bold text-white mb-2 text-center">{workshop.title}</h4>
-                                                    <p className="text-white/60 text-sm mb-6 text-center">
-                                                        Resource - <a href={workshop.resourceLink} target="_blank" rel="noopener noreferrer" className="text-teal-400 hover:text-teal-300 underline underline-offset-4">{workshop.resourceName}</a>
-                                                    </p>
-                                                    <a href={workshop.link} target="_blank" rel="noopener noreferrer" className="mt-auto w-full bg-gradient-to-r from-teal-500/20 to-cyan-500/20 hover:from-teal-500/40 hover:to-cyan-500/40 border border-teal-500/50 text-teal-300 py-2.5 px-4 rounded-xl text-center transition-all text-sm font-semibold shadow-lg shadow-teal-500/10">
-                                                        Exam Link {idx + 1}
-                                                    </a>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                            </motion.div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
             </div>
+
+            {/* Modal for Event Details */}
+            <AnimatePresence>
+                {selectedEvent && selectedEvent.detailedInfo && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-[#0a1020]/95 backdrop-blur-md"
+                        onClick={() => setSelectedEvent(null)}
+                    >
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            className="bg-navy border border-white/10 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto relative p-6 sm:p-10 shadow-2xl custom-scrollbar"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <button
+                                onClick={() => setSelectedEvent(null)}
+                                className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors z-[9999]"
+                            >
+                                <X size={24} />
+                            </button>
+
+                            <h2 className="text-3xl sm:text-4xl font-display font-bold text-white mb-2">{selectedEvent.title}</h2>
+                            <p className="text-lg text-white/70 mb-8">{selectedEvent.desc}</p>
+
+                            {selectedEvent.detailedInfo.posterImage && (
+                                <div className="mb-10">
+                                    <img src={selectedEvent.detailedInfo.posterImage} alt={`${selectedEvent.title} Poster`} className="w-full md:w-3/4 lg:w-2/3 mx-auto rounded-xl shadow-lg border border-white/10" />
+                                </div>
+                            )}
+
+                            {selectedEvent.detailedInfo.chiefGuests && (
+                                <div>
+                                    <h3 className="text-2xl font-semibold text-white mb-4 text-center">Chief Guests</h3>
+                                    <p className="text-center text-white/60 mb-8 max-w-2xl mx-auto">
+                                        We are thrilled to introduce influential speakers who will inspire and engage as we explore the future of technology together.
+                                    </p>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        {selectedEvent.detailedInfo.chiefGuests.map((guest, idx) => (
+                                            <div key={idx} className="text-center p-4 rounded-xl glass border border-white/10 hover:bg-white/5 transition-colors">
+                                                <img src={guest.image} alt={guest.name} className="w-full h-56 object-cover rounded-lg shadow-md mb-4" />
+                                                <h4 className="text-xl font-bold text-white mb-1">{guest.name}</h4>
+                                                <p className="text-teal-400 text-sm font-semibold">{guest.role}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {selectedEvent.detailedInfo.workshops && (
+                                <div className="mt-12 mb-8">
+                                    <h3 className="text-3xl font-display font-semibold text-white mb-4 text-center">Hackathons & Workshops</h3>
+                                    <p className="text-center text-white/60 mb-8 max-w-2xl mx-auto">
+                                        Hackathons are events where programmers, designers, and developers collaborate intensively to solve problems. Check out our resources and exams below!
+                                    </p>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                                        {selectedEvent.detailedInfo.workshops.map((workshop, idx) => (
+                                            <div key={idx} className="bg-white/5 border border-white/10 rounded-2xl p-5 hover:bg-white/10 transition-colors flex flex-col items-center">
+                                                <a href={workshop.link} target="_blank" rel="noopener noreferrer" className="w-full block overflow-hidden rounded-lg mb-4">
+                                                    <img src={workshop.image} alt={workshop.title} className="w-full h-48 object-cover object-top hover:scale-110 transition-transform duration-700" />
+                                                </a>
+                                                <h4 className="text-xl font-bold text-white mb-2 text-center">{workshop.title}</h4>
+                                                <p className="text-white/60 text-sm mb-6 text-center">
+                                                    Resource - <a href={workshop.resourceLink} target="_blank" rel="noopener noreferrer" className="text-teal-400 hover:text-teal-300 underline underline-offset-4">{workshop.resourceName}</a>
+                                                </p>
+                                                <a href={workshop.link} target="_blank" rel="noopener noreferrer" className="mt-auto w-full bg-gradient-to-r from-teal-500/20 to-cyan-500/20 hover:from-teal-500/40 hover:to-cyan-500/40 border border-teal-500/50 text-teal-300 py-2.5 px-4 rounded-xl text-center transition-all text-sm font-semibold shadow-lg shadow-teal-500/10">
+                                                    Exam Link {idx + 1}
+                                                </a>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </section>
     )
 }

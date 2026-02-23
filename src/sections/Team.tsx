@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight, X } from 'lucide-react'
 import SectionHeading from '@/components/ui/SectionHeading'
 import { TextRoll } from '@/components/ui/TextRoll'
 
@@ -114,6 +114,7 @@ const Team: React.FC = () => {
     const [direction, setDirection] = useState(1)
     const [paused, setPaused] = useState(false)
     const [slideKey, setSlideKey] = useState(0)
+    const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null)
 
     const members = teamData[activeYear] || []
     const photos = combinedPhotos[activeYear] || []
@@ -216,7 +217,8 @@ const Team: React.FC = () => {
                                     return (
                                         <motion.div
                                             key={`${activeYear}-photo-${index}`}
-                                            className="absolute inset-0 w-full h-full rounded-2xl border border-white/15 shadow-2xl overflow-hidden"
+                                            className="absolute inset-0 w-full h-full rounded-2xl border border-white/15 shadow-2xl overflow-hidden cursor-zoom-in"
+                                            onClick={() => setSelectedPhoto(photo)}
                                             style={{ backgroundColor: '#0c1628' }}
                                             initial={{
                                                 x: offset * 30,
@@ -367,6 +369,39 @@ const Team: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Lightbox Modal */}
+            <AnimatePresence>
+                {selectedPhoto && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setSelectedPhoto(null)}
+                        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 cursor-zoom-out"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            transition={{ type: "spring", damping: 20 }}
+                            className="relative max-w-5xl max-h-[90vh] w-full h-full flex flex-col items-center justify-center pointer-events-none"
+                        >
+                            <img
+                                src={selectedPhoto}
+                                alt="Team Photo Preview"
+                                className="max-w-full max-h-full object-contain rounded-lg shadow-2xl pointer-events-auto"
+                            />
+                            <button
+                                onClick={() => setSelectedPhoto(null)}
+                                className="absolute top-4 right-4 sm:top-8 sm:right-8 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors pointer-events-auto z-[110]"
+                            >
+                                <X size={24} />
+                            </button>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </section>
     )
 }
