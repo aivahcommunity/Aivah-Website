@@ -38,9 +38,9 @@ export const events: AivahEvent[] = [
     {
         id: 1,
         title: 'Zenix',
-        desc: '2-Days Placement Stimulation Drive including Techinical Events',
-        date: 'Mar 5-6, 2026',
-        time: '9:00 AM',
+        desc: '2-Days Placement Stimulation Drive including Techinical Events and Non-Techinical Events',
+        date: 'Feb 27-28, 2026',
+        time: '9:15 AM',
         status: 'upcoming',
         tag: 'Community Event',
         tagColor: 'from-pink-500 to-purple-500',
