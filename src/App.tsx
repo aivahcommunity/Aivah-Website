@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 import Navbar from '@/components/Navbar'
 import Hero from '@/sections/Hero'
 import About from '@/sections/About'
@@ -40,6 +41,7 @@ const App: React.FC = () => {
                             <Contact />
                         </main>
                         <Footer />
+                        <SpeedInsights />
                     </motion.div>
                 )}
             </AnimatePresence>
