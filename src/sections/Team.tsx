@@ -22,19 +22,19 @@ const combinedPhotos: Record<string, string[]> = {
         '/2023 team/SnapInsta.to_440683623_1552960145247430_1078725235573752211_n.jpg'
     ],
     '2024': [
-        '/2024 team/SnapInsta.to_464470091_979568767279258_8581328207408311337_n.jpg',
-        '/2024 team/SnapInsta.to_465687833_1098970298619389_3347833645681731293_n.jpg',
-        '/2024 team/SnapInsta.to_466381578_1262725444761285_5712770959385586028_n.jpg',
-        '/2024 team/SnapInsta.to_466429268_921346359928675_8163916616126475993_n.jpg',
-        '/2024 team/SnapInsta.to_466578361_1819024828846702_5829978496907981579_n.jpg',
-        '/2024 team/SnapInsta.to_466590677_553785860735249_1738286278028387752_n.jpg',
-        '/2024 team/SnapInsta.to_466611616_575376461842260_4395769284069570384_n.jpg',
-        '/2024 team/SnapInsta.to_466725615_447717221680893_3217104751884780078_n.jpg',
-        '/2024 team/SnapInsta.to_466734414_975412197968662_4506773317879141555_n.jpg',
-        '/2024 team/SnapInsta.to_466934388_588623333690699_4067233674780902626_n.jpg',
-        '/2024 team/SnapInsta.to_466938384_922080283217080_2751326796062238703_n.jpg',
-        '/2024 team/SnapInsta.to_466953818_498868956521981_1370109835215747470_n.jpg',
-        '/2024 team/SnapInsta.to_467025896_498011943390954_3506017938332350544_n.jpg'
+        '/2024 team/1.jpg',
+        '/2024 team/2.jpg',
+        '/2024 team/3.jpg',
+        '/2024 team/4.jpg',
+        '/2024 team/5.jpg',
+        '/2024 team/6.jpg',
+        '/2024 team/7.jpg',
+        '/2024 team/8.jpg',
+        '/2024 team/9.jpg',
+        '/2024 team/10.jpg',
+        '/2024 team/11.jpg',
+        '/2024 team/12.jpg',
+        '/2024 team/13.jpg'
     ]
 }
 
@@ -248,7 +248,7 @@ const Team: React.FC = () => {
                                             }}
                                             transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
                                         >
-                                            <img src={photo} alt={`${activeYear} Team Photo ${index + 1}`} className="w-full h-full object-cover" />
+                                            <img src={photo} alt={`${activeYear} Team Photo ${index + 1}`} className="w-full h-full object-contain bg-[#0c1628]" />
                                         </motion.div>
                                     )
                                 })
