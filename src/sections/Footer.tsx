@@ -122,7 +122,7 @@ const Footer: React.FC = () => {
                 {/* Bottom bar */}
                 <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <p className="text-white/25 text-xs">
-                        © {new Date().getFullYear()} Aivah Community. Built with ❤️ by students, for students.
+                        © {new Date().getFullYear()} Aivah Community. Built with ❤️ by technical team.
                     </p>
                     <a
                         href="mailto:aivah.mrdu@gmail.com"
