@@ -224,8 +224,7 @@ const Hero: React.FC = () => {
                     initial={{ opacity: 0, scale: 0.9, x: 20 }}
                     animate={{ opacity: 1, scale: 1, x: 0 }}
                     transition={{ delay: 1.8, duration: 0.6, type: 'spring' }}
-                    className="fixed z-[999] top-24 right-4 md:top-28 md:right-8 pointer-events-none"
-                    style={{ position: 'fixed' }}
+                    className="absolute z-50 top-24 right-4 md:top-28 md:right-8 pointer-events-none"
                 >
                     <motion.div
                         animate={{ y: [0, -8, 0] }}
@@ -233,20 +232,20 @@ const Hero: React.FC = () => {
                         onClick={() => scrollToSection('events')}
                         className="relative group cursor-pointer pointer-events-auto"
                     >
-                        <div className="absolute -inset-0.5 bg-gradient-to-r from-teal-500 to-purple-500 rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
-                        <div className="relative flex items-center gap-3 bg-navy/80 backdrop-blur-md border border-white/10 p-3 pr-4 rounded-2xl hover:border-teal-500/30 transition-all">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-500/20 to-purple-500/20 flex items-center justify-center flex-shrink-0">
-                                <Sparkles className="text-teal-400 w-5 h-5 animate-pulse" />
+                        <div className="absolute -inset-0.5 bg-gradient-to-r from-teal-500 to-purple-500 rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
+                        <div className="relative flex items-center gap-2 bg-navy/80 backdrop-blur-md border border-white/10 p-2 pr-3 rounded-xl hover:border-teal-500/30 transition-all">
+                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-teal-500/20 to-purple-500/20 flex items-center justify-center flex-shrink-0">
+                                <Sparkles className="text-teal-400 w-4 h-4 animate-pulse" />
                             </div>
                             <div>
-                                <div className="text-[10px] uppercase tracking-wider font-bold text-teal-400 mb-0.5 flex items-center gap-1.5">
+                                <div className="text-[9px] uppercase tracking-wider font-bold text-teal-400 mb-0.5 flex items-center gap-1">
                                     <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />
                                     Upcoming Event
                                 </div>
-                                <h4 className="text-white font-display font-medium text-sm line-clamp-1 pr-2">{upcomingEvent.title}</h4>
+                                <h4 className="text-white font-display font-medium text-xs line-clamp-1 pr-1">{upcomingEvent.title}</h4>
                             </div>
-                            <div className="ml-1 w-7 h-7 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-teal-500/20 transition-all shrink-0">
-                                <ArrowRight size={14} className="text-white/40 group-hover:text-teal-400" />
+                            <div className="ml-1 w-6 h-6 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-teal-500/20 transition-all shrink-0">
+                                <ArrowRight size={12} className="text-white/40 group-hover:text-teal-400" />
                             </div>
                         </div>
                     </motion.div>

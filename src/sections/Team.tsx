@@ -35,6 +35,10 @@ const combinedPhotos: Record<string, string[]> = {
         '/2024 team/11.jpg',
         '/2024 team/12.jpg',
         '/2024 team/13.jpg'
+    ],
+    '2026': [
+        '/2025 team/interns.jpeg'
+
     ]
 }
 
@@ -118,9 +122,10 @@ const Team: React.FC = () => {
 
     const members = teamData[activeYear] || []
     const photos = combinedPhotos[activeYear] || []
-    const isPhotoMode = photos.length > 0
-    const itemCount = isPhotoMode ? photos.length : members.length
-    const activeItem = !isPhotoMode ? members[activeIndex] : null
+    const items = [...photos, ...members]
+    const itemCount = items.length
+    const activeItem = items[activeIndex]
+    const isPhotoActive = typeof activeItem === 'string'
 
     // Auto-play — pauses on hover
     useEffect(() => {
@@ -151,7 +156,7 @@ const Team: React.FC = () => {
         setDirection(1)
     }
 
-    const deptStyle = activeItem ? (deptColors[activeItem.dept] || deptColors['Tech']) : ''
+    const deptStyle = !isPhotoActive && activeItem ? (deptColors[(activeItem as Member).dept] || deptColors['Tech']) : ''
     const gradIdx = activeIndex % avatarGradients.length
 
     return (
@@ -203,17 +208,19 @@ const Team: React.FC = () => {
                 >
                     {/* Stacked card deck — hover pauses auto-play */}
                     <div
-                        className={`relative flex-shrink-0 ${isPhotoMode ? 'w-full max-w-sm sm:max-w-md h-64 sm:h-80' : 'w-52 h-64'}`}
+                        className={`relative flex-shrink-0 transition-all duration-500 ease-in-out ${isPhotoActive ? 'w-full max-w-sm sm:max-w-md h-64 sm:h-80' : 'w-52 h-64'}`}
                         onMouseEnter={() => setPaused(true)}
                         onMouseLeave={() => setPaused(false)}
                     >
                         <AnimatePresence custom={direction}>
-                            {isPhotoMode
-                                ? photos.map((photo, index) => {
-                                    const isActive = index === activeIndex
-                                    const offset = index - activeIndex
-                                    const rot = rotations[index % rotations.length]
+                            {items.map((item, index) => {
+                                const isActive = index === activeIndex
+                                const offset = index - activeIndex
+                                const rot = rotations[index % rotations.length]
+                                const isItemPhoto = typeof item === 'string'
 
+                                if (isItemPhoto) {
+                                    const photo = item as string;
                                     return (
                                         <motion.div
                                             key={`${activeYear}-photo-${index}`}
@@ -251,16 +258,13 @@ const Team: React.FC = () => {
                                             <img src={photo} alt={`${activeYear} Team Photo ${index + 1}`} className="w-full h-full object-contain bg-[#0c1628]" />
                                         </motion.div>
                                     )
-                                })
-                                : members.map((member, index) => {
-                                    const isActive = index === activeIndex
-                                    const offset = index - activeIndex
-                                    const rot = rotations[index % rotations.length]
+                                } else {
+                                    const member = item as Member;
                                     const gradI = index % avatarGradients.length
 
                                     return (
                                         <motion.div
-                                            key={`${activeYear}-${index}`}
+                                            key={`${activeYear}-member-${index}`}
                                             className="absolute inset-0 w-full h-full rounded-2xl border border-white/15 shadow-2xl flex flex-col items-center justify-center gap-3 p-5"
                                             style={{ backgroundColor: '#0c1628' }}
                                             initial={{
@@ -302,7 +306,8 @@ const Team: React.FC = () => {
                                             )}
                                         </motion.div>
                                     )
-                                })}
+                                }
+                            })}
                         </AnimatePresence>
                     </div>
 
@@ -323,22 +328,22 @@ const Team: React.FC = () => {
                                 transition={{ duration: 0.35 }}
                                 className="flex flex-col gap-3"
                             >
-                                {!isPhotoMode && activeItem ? (
+                                {!isPhotoActive && activeItem ? (
                                     <>
-                                        {activeItem.role === 'President' && (
+                                        {(activeItem as Member).role === 'President' && (
                                             <span className="inline-flex w-fit px-3 py-0.5 rounded-full text-[10px] font-bold bg-gradient-to-r from-yellow-400 to-orange-400 text-black tracking-wide">
                                                 👑 President
                                             </span>
                                         )}
                                         <h3 className="font-display text-3xl font-bold text-white leading-tight">
-                                            {activeItem.name}
+                                            {(activeItem as Member).name}
                                         </h3>
-                                        <p className="text-white/50 text-base">{activeItem.role}</p>
+                                        <p className="text-white/50 text-base">{(activeItem as Member).role}</p>
                                     </>
                                 ) : (
                                     <>
                                         <h3 className="font-display text-3xl font-bold text-white leading-tight">
-                                            {activeYear} Team
+                                            {activeYear} Team Photo
                                         </h3>
                                     </>
                                 )}
