@@ -105,8 +105,8 @@ const About: React.FC = () => {
                                     <Zap size={18} className="text-white" />
                                 </div>
                                 <div>
-                                    <p className="text-xs text-purple-400 font-semibold uppercase tracking-widest">Founded By</p>
-                                    <p className="text-white font-bold text-sm leading-tight">Department of IT & AIML</p>
+                                    <p className="text-xs text-purple-400 font-semibold uppercase tracking-widest">By</p>
+                                    <p className="text-white font-bold text-sm leading-tight">Department of IT , B.Tech AIML & CS-IT</p>
                                 </div>
                             </div>
                         </div>

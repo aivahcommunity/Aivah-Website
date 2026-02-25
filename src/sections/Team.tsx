@@ -37,58 +37,18 @@ const combinedPhotos: Record<string, string[]> = {
         '/2024 team/13.jpg'
     ],
     '2026': [
-        '/2025 team/interns.jpeg'
-
+        '/2025 team/1.president.jpeg',
+        '/2025 team/2vicepresidents.jpeg',
+        '/2025 team/3secretaries.jpeg',
+        '/2025 team/4executive-board.jpeg',
+        '/2025 team/4treasuries.jpeg',
+        '2025 team/5pr.jpeg',
+        '/2025 team/5event organizers.jpeg',
+        '/2025 team/6Designers.jpg.jpeg',
+        '/2025 team/7technical.jpeg',
+        '/2025 team/documentation.jpeg',
+        '/2025 team/zinterns.jpeg',
     ]
-}
-
-const teamData: Record<string, Member[]> = {
-    '2026': [
-        { name: 'G. Akshitha', role: 'President', dept: 'Tech', avatar: 'GA' },
-        { name: 'B. Pranay', role: 'Vice President', dept: 'Community', avatar: 'BP' },
-        { name: 'Ch. Jahnavi', role: 'Vice President', dept: 'Community', avatar: 'CJ' },
-        { name: 'K. Omguru Sai', role: 'Secretary', dept: 'Ops', avatar: 'KO' },
-        { name: 'B. Shamith Raju', role: 'Secretary', dept: 'Ops', avatar: 'BS' },
-        { name: 'G. Uday', role: 'Secretary', dept: 'Ops', avatar: 'GU' },
-        { name: 'G. Manjunada', role: 'Treasurer', dept: 'Ops', avatar: 'GM' },
-        { name: 'V. Sri Venkateshwar Rao', role: 'Treasurer', dept: 'Ops', avatar: 'VS' },
-        { name: 'S. Rakesh', role: 'Public Relations', dept: 'Marketing', avatar: 'SR' },
-        { name: 'B. Moksha', role: 'Public Relations', dept: 'Marketing', avatar: 'BM' },
-        { name: 'M. Sricharana', role: 'Public Relations', dept: 'Marketing', avatar: 'MS' },
-        { name: 'E. Poojitha', role: 'Public Relations', dept: 'Marketing', avatar: 'EP' },
-        { name: 'M. Akhil Reddy', role: 'Executive Board', dept: 'Community', avatar: 'MA' },
-        { name: 'S. Ananda Vardhan', role: 'Executive Board', dept: 'Community', avatar: 'SA' },
-        { name: 'J. Sai Keerthi', role: 'Executive Board', dept: 'Community', avatar: 'JK' },
-        { name: 'G. Likhitha', role: 'Executive Board', dept: 'Community', avatar: 'GL' },
-        { name: 'V. Suresh', role: 'Technical', dept: 'Tech', avatar: 'VS' },
-        { name: 'G. Sai Reddy', role: 'Technical', dept: 'Tech', avatar: 'GS' },
-        { name: 'Puttaraj', role: 'Technical', dept: 'Tech', avatar: 'P' },
-        { name: 'D. Sathwik', role: 'Technical', dept: 'Tech', avatar: 'DS' },
-        { name: 'Md. Junedh', role: 'Technical', dept: 'Tech', avatar: 'MJ' },
-        { name: 'B. Rohith', role: 'Technical', dept: 'Tech', avatar: 'BR' },
-        { name: 'A. Madhu Priya', role: 'Technical', dept: 'Tech', avatar: 'AM' },
-        { name: 'P. Doleshwar', role: 'Technical', dept: 'Tech', avatar: 'PD' },
-        { name: 'P. Peterson', role: 'Design', dept: 'Design', avatar: 'PP' },
-        { name: 'A. Arun', role: 'Design', dept: 'Design', avatar: 'AA' },
-        { name: 'N. Narenraj', role: 'Design', dept: 'Design', avatar: 'NN' },
-        { name: 'K. Navya Sree', role: 'Design', dept: 'Design', avatar: 'KN' },
-        { name: 'B. Haricharan', role: 'Design', dept: 'Design', avatar: 'BH' },
-        { name: 'Ch. Vaishnavi', role: 'Design', dept: 'Design', avatar: 'CV' },
-        { name: 'M. Sai Charan', role: 'Design', dept: 'Design', avatar: 'MC' },
-        { name: 'K. Lasya', role: 'Design', dept: 'Design', avatar: 'KL' },
-        { name: 'K. Ganesh', role: 'Documentation', dept: 'Ops', avatar: 'KG' },
-        { name: 'T. ManiSharan', role: 'Documentation', dept: 'Ops', avatar: 'TM' },
-        { name: 'E. Sai Snigdha', role: 'Documentation', dept: 'Ops', avatar: 'ES' },
-        { name: 'M. Supriya', role: 'Documentation', dept: 'Ops', avatar: 'MS' },
-        { name: 'L. Rahul', role: 'Event Organization', dept: 'Ops', avatar: 'LR' },
-        { name: 'P. Sai Divya', role: 'Event Organization', dept: 'Ops', avatar: 'PS' },
-        { name: 'D. ChandraShekar', role: 'Event Organization', dept: 'Ops', avatar: 'DC' },
-        { name: 'A. Lohith', role: 'Event Organization', dept: 'Ops', avatar: 'AL' },
-        { name: 'T. Easha', role: 'Event Organization', dept: 'Ops', avatar: 'TE' },
-        { name: 'G. Tejaswini', role: 'Event Organization', dept: 'Ops', avatar: 'GT' },
-        { name: 'G. Avinash', role: 'Event Organization', dept: 'Ops', avatar: 'GA' },
-        { name: 'J. Deepika', role: 'Event Organization', dept: 'Ops', avatar: 'JD' },
-    ],
 }
 
 const years = ['2023', '2024', '2026']
@@ -120,9 +80,9 @@ const Team: React.FC = () => {
     const [slideKey, setSlideKey] = useState(0)
     const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null)
 
-    const members = teamData[activeYear] || []
+
     const photos = combinedPhotos[activeYear] || []
-    const items = [...photos, ...members]
+    const items = [...photos]
     const itemCount = items.length
     const activeItem = items[activeIndex]
     const isPhotoActive = typeof activeItem === 'string'
@@ -203,7 +163,7 @@ const Team: React.FC = () => {
 
                 {/* Card stack + info panel */}
                 <div
-                    className="flex flex-col sm:flex-row items-center justify-center gap-12 sm:gap-16"
+                    className="flex flex-col items-center justify-center gap-10"
                     style={{ perspective: '1400px' }}
                 >
                     {/* Stacked card deck — hover pauses auto-play */}
@@ -255,7 +215,7 @@ const Team: React.FC = () => {
                                             }}
                                             transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
                                         >
-                                            <img src={photo} alt={`${activeYear} Team Photo ${index + 1}`} className="w-full h-full object-contain bg-[#0c1628]" />
+                                            <img src={photo} alt={`${activeYear} Team  ${index + 1}`} className="w-full h-full object-contain bg-[#0c1628]" />
                                         </motion.div>
                                     )
                                 } else {
@@ -312,9 +272,9 @@ const Team: React.FC = () => {
                     </div>
 
                     {/* Info panel */}
-                    <div className="flex flex-col gap-6 max-w-xs w-full">
+                    <div className="flex flex-col items-center text-center gap-5 max-w-md w-full">
                         {/* Counter */}
-                        <p className="font-mono text-sm text-white/40 text-right">
+                        <p className="font-mono text-sm text-white/40">
                             {activeIndex + 1} / {itemCount}
                         </p>
 
@@ -326,7 +286,7 @@ const Team: React.FC = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -25 }}
                                 transition={{ duration: 0.35 }}
-                                className="flex flex-col gap-3"
+                                className="flex flex-col items-center gap-3"
                             >
                                 {!isPhotoActive && activeItem ? (
                                     <>
@@ -343,7 +303,7 @@ const Team: React.FC = () => {
                                 ) : (
                                     <>
                                         <h3 className="font-display text-3xl font-bold text-white leading-tight">
-                                            {activeYear} Team Photo
+                                            {activeYear} Team
                                         </h3>
                                     </>
                                 )}
@@ -351,7 +311,7 @@ const Team: React.FC = () => {
                         </AnimatePresence>
 
                         {/* Navigation */}
-                        <div className="flex items-center gap-3 mt-2">
+                        <div className="flex items-center justify-center gap-3 mt-2">
                             <motion.button
                                 whileTap={{ scale: 0.9 }}
                                 whileHover={{ scale: 1.08 }}

@@ -46,6 +46,7 @@ export const events: AivahEvent[] = [
         tagColor: 'from-pink-500 to-purple-500',
         gradient: 'from-teal-500/20 to-purple-500/20',
         registrationLink: 'https://docs.google.com/forms/d/e/1FAIpQLSdNJDObFszUlWLF3oC7jlGDcm3-8zXDiLJkbn9gXu_ViybZhw/viewform',
+        image: '/zenix.jpeg',
     },
     {
         id: 2,
@@ -62,18 +63,6 @@ export const events: AivahEvent[] = [
     },
     {
         id: 3,
-        category: 'design',
-        title: 'Design Thinking Sprint',
-        desc: 'Rapid prototyping and user-centric design methodologies in action.',
-        date: 'Jul 2024',
-        time: '',
-        status: 'past',
-        tag: 'Completed',
-        tagColor: 'from-slate-500 to-slate-600',
-        gradient: 'from-slate-500/10 to-slate-600/10',
-        image: '/events/SnapInsta.to_620733783_18020491451803413_4338217546077967320_n.jpg.jpeg',
-    }, {
-        id: 4,
         category: 'workshop',
         title: 'Devops Workshop',
         desc: 'Learn the fundamentals of DevOps and how to use it to improve your software development process.',
@@ -83,9 +72,9 @@ export const events: AivahEvent[] = [
         tag: 'Completed',
         tagColor: 'from-slate-500 to-slate-600',
         gradient: 'from-slate-500/10 to-slate-600/10',
-        image: '/events/SnapInsta.to_620733783_18020491451803413_4338217546077967320_n.jpg.jpeg',
+        image: '/SnapInsta.to_610548734_17973170252992058_4499195614938485338_n.jpg',
     }, {
-        id: 5,
+        id: 4,
         category: 'Meet-Up',
         title: 'Zenith',
         desc: 'Zenith, hosted by the AIVAH Community, is a platform where creators, innovators, and visionaries unite to share insights and foster collaborations.',
@@ -106,11 +95,11 @@ export const events: AivahEvent[] = [
             ]
         }
     }, {
-        id: 7,
+        id: 5,
         category: 'workshop',
         title: 'Devigo',
         desc: 'DEVIGO— Develop, Innovate, Go—is dedicated to empowering creators and thinkers to turn ideas into reality.',
-        date: 'Jan 2026',
+        date: 'Nov 2024',
         time: '',
         status: 'past',
         tag: 'Completed',
@@ -123,21 +112,21 @@ export const events: AivahEvent[] = [
                 {
                     title: 'DSA using C',
                     image: '/2024 team/devigo/DSA.jpg',
-                    link: 'https://forms.gle/fgtEaxhaUVVE1AvX9',
+                    link: '#',
                     resourceLink: 'https://drive.google.com/drive/folders/1Vj5r2pY7pCWfolF7BGDLEwpSebLoSYnu',
                     resourceName: 'DSA using C'
                 },
                 {
                     title: 'Prompt Engineering',
                     image: '/2024 team/devigo/prompt.jpg',
-                    link: 'https://forms.gle/fgtEaxhaUVVE1AvX9',
+                    link: '#',
                     resourceLink: 'https://drive.google.com/drive/folders/1O9mJIsr1Ygq0h6qDcijRG4paWzvkXHwE',
                     resourceName: 'Prompt Engineering'
                 },
                 {
                     title: 'Devops & AWS',
                     image: '/2024 team/devigo/AWS.jpg',
-                    link: 'https://forms.gle/fgtEaxhaUVVE1AvX9',
+                    link: '#',
                     resourceLink: 'https://drive.google.com/drive/folders/15Qtacqo3O6EFa3TstB6bVpGw3l3SksjY',
                     resourceName: 'Devops & AWS'
                 }
@@ -166,9 +155,9 @@ const EventCard: React.FC<{ event: AivahEvent; index: number; onClick: () => voi
                     <img
                         src={event.image}
                         alt={event.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-40 will-change-transform"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-50"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/40" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0c1628] via-[#0c1628]/60 to-transparent" />
                 </div>
             )}
 
@@ -196,7 +185,7 @@ const EventCard: React.FC<{ event: AivahEvent; index: number; onClick: () => voi
                 <p className="text-white/70 text-sm leading-relaxed mb-5 flex-1">{event.desc}</p>
 
                 {/* Meta */}
-                <div className="flex items-center gap-2 text-white/60 text-xs">
+                <div className="flex items-center gap-2 text-white/60 text-xs mb-4">
                     <Calendar size={13} className="text-teal-400" />
                     <span>{event.date}</span>
                     {event.time && <><Clock size={13} className="text-purple-400 ml-2" /><span>{event.time}</span></>}
@@ -375,9 +364,6 @@ const Events: React.FC = () => {
                                                 <p className="text-white/60 text-sm mb-6 text-center">
                                                     Resource - <a href={workshop.resourceLink} target="_blank" rel="noopener noreferrer" className="text-teal-400 hover:text-teal-300 underline underline-offset-4">{workshop.resourceName}</a>
                                                 </p>
-                                                <a href={workshop.link} target="_blank" rel="noopener noreferrer" className="mt-auto w-full bg-gradient-to-r from-teal-500/20 to-cyan-500/20 hover:from-teal-500/40 hover:to-cyan-500/40 border border-teal-500/50 text-teal-300 py-2.5 px-4 rounded-xl text-center transition-all text-sm font-semibold shadow-lg shadow-teal-500/10">
-                                                    Exam Link {idx + 1}
-                                                </a>
                                             </div>
                                         ))}
                                     </div>

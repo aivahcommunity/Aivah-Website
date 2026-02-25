@@ -33,6 +33,17 @@ const galleryItems = [
     { id: 25, image: '/devigo.jpeg' },
     { id: 26, image: '/WhatsApp Image 2026-02-23 at 3.07.02 PM.jpeg' },
     { id: 27, image: '/WhatsApp Image 2026-02-23 at 3.07.15 PM.jpeg' },
+    {id:28,image:'/WhatsApp Image 2026-02-24 at 6.20.25 PM.jpeg'},
+    {id:29,image:'/WhatsApp Image 2026-02-24 at 6.20.26 PM.jpeg'},
+    {id:30,image:'zenix.jpeg'},
+    {id:31,image:'31.jpeg'},
+    {id:32,image:'32.jpeg'},
+    {id:33,image:'33.jpeg'},
+    {id:34,image:'34.jpeg'},
+    {id:35,image:'35.jpeg'},
+    {id:36,image:'36.jpeg'}
+
+
 ]
 
 const GalleryItem: React.FC<{ item: typeof galleryItems[0]; onClick: (item: typeof galleryItems[0]) => void }> = ({ item, onClick }) => {
