@@ -37,12 +37,12 @@ const combinedPhotos: Record<string, string[]> = {
         '/2024 team/13.jpg'
     ],
     '2026': [
-        '/2025 team/1.president.jpeg',
+        '/2025 team/1president.jpg.jpeg',
         '/2025 team/2vicepresidents.jpeg',
         '/2025 team/3secretaries.jpeg',
         '/2025 team/4executive-board.jpeg',
         '/2025 team/4treasuries.jpeg',
-        '2025 team/5pr.jpeg',
+        '2025 team/5pr.jpg.jpeg',
         '/2025 team/5event organizers.jpeg',
         '/2025 team/6Designers.jpg.jpeg',
         '/2025 team/7technical.jpeg',
