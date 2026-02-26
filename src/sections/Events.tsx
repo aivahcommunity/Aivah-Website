@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Calendar, Clock, ArrowRight, Zap, Code, Palette, Coffee, BookOpen, X } from 'lucide-react'
 import SectionHeading from '@/components/ui/SectionHeading'
@@ -14,6 +14,10 @@ export type AivahEvent = {
     desc: string
     date: string
     time: string
+    /** Optional end date string (e.g. '2026-02-28') to mark when the event finishes. Defaults to same as start day. */
+    endDate?: string
+    /** Optional end time string (e.g. '6:00 PM'). Defaults to 11:59 PM of the event day. */
+    endTime?: string
     status: 'upcoming' | 'past'
     tag: string
     tagColor: string
@@ -28,10 +32,104 @@ export type AivahEvent = {
     }
 }
 
+/**
+ * Parses a time string like "9:15 AM" or "12:00 PM" into { hours, minutes }.
+ */
+function parseTime(timeStr: string): { hours: number; minutes: number } | null {
+    const match = timeStr.trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i)
+    if (!match) return null
+    let hours = parseInt(match[1], 10)
+    const minutes = parseInt(match[2], 10)
+    const meridiem = match[3].toUpperCase()
+    if (meridiem === 'PM' && hours !== 12) hours += 12
+    if (meridiem === 'AM' && hours === 12) hours = 0
+    return { hours, minutes }
+}
+
+/**
+ * Parses the event date string into a JS Date for the START of that day.
+ * Handles formats like:
+ *  - 'Feb 27-28, 2026'  → Feb 27 2026
+ *  - '28-02-2026'       → Feb 28 2026
+ *  - 'Aug 2024'         → Aug 1 2024
+ */
+function parseEventStartDate(dateStr: string): Date | null {
+    // Format: 'DD-MM-YYYY'
+    const dmyMatch = dateStr.match(/^(\d{1,2})-(\d{2})-(\d{4})$/)
+    if (dmyMatch) {
+        return new Date(parseInt(dmyMatch[3]), parseInt(dmyMatch[2]) - 1, parseInt(dmyMatch[1]))
+    }
+    // Format: 'Month DD-DD, YYYY' (range)
+    const rangeMatch = dateStr.match(/^([A-Za-z]+)\s+(\d{1,2})-?(\d{1,2})?(?:,\s*)(\d{4})$/)
+    if (rangeMatch) {
+        const d = new Date(`${rangeMatch[1]} ${rangeMatch[2]}, ${rangeMatch[4]}`)
+        if (!isNaN(d.getTime())) return d
+    }
+    // Format: 'Month YYYY'
+    const monthYearMatch = dateStr.match(/^([A-Za-z]+)\s+(\d{4})$/)
+    if (monthYearMatch) {
+        const d = new Date(`${monthYearMatch[1]} 1, ${monthYearMatch[2]}`)
+        if (!isNaN(d.getTime())) return d
+    }
+    // Fallback: let Date parse it
+    const d = new Date(dateStr)
+    return isNaN(d.getTime()) ? null : d
+}
+
+/**
+ * Parses the event date string into a JS Date for the END of that day/range.
+ */
+function parseEventEndDate(dateStr: string): Date | null {
+    // Format: 'DD-MM-YYYY'
+    const dmyMatch = dateStr.match(/^(\d{1,2})-(\d{2})-(\d{4})$/)
+    if (dmyMatch) {
+        return new Date(parseInt(dmyMatch[3]), parseInt(dmyMatch[2]) - 1, parseInt(dmyMatch[1]))
+    }
+    // Format: 'Month DD-DD, YYYY' (range) → pick last day
+    const rangeMatch = dateStr.match(/^([A-Za-z]+)\s+(\d{1,2})-(\d{1,2}),\s*(\d{4})$/)
+    if (rangeMatch) {
+        const d = new Date(`${rangeMatch[1]} ${rangeMatch[3]}, ${rangeMatch[4]}`)
+        if (!isNaN(d.getTime())) return d
+    }
+    return parseEventStartDate(dateStr)
+}
+
+/**
+ * Returns true when `now` is within the event's live window.
+ */
+function isEventLive(event: AivahEvent, now: Date): boolean {
+    if (event.status !== 'upcoming') return false
+
+    const startDay = parseEventStartDate(event.date)
+    if (!startDay) return false
+
+    // Build start datetime
+    const startDt = new Date(startDay)
+    if (event.time) {
+        const t = parseTime(event.time)
+        if (t) { startDt.setHours(t.hours, t.minutes, 0, 0) }
+    } else {
+        startDt.setHours(0, 0, 0, 0)
+    }
+
+    // Build end datetime
+    const endDay = event.endDate ? parseEventStartDate(event.endDate) : parseEventEndDate(event.date)
+    const endDt = new Date(endDay ?? startDay)
+    if (event.endTime) {
+        const t = parseTime(event.endTime)
+        if (t) { endDt.setHours(t.hours, t.minutes, 59, 999) }
+    } else {
+        endDt.setHours(23, 59, 59, 999)
+    }
+
+    return now >= startDt && now <= endDt
+}
+
 const categories = [
     { id: 'all', label: 'All Events', icon: Zap },
     { id: 'workshop', label: 'Workshop', icon: BookOpen },
     { id: 'meetup', label: 'Meetup', icon: Coffee },
+    { id: 'test', label: 'test', icon: BookOpen }
 ]
 
 export const events: AivahEvent[] = [
@@ -132,87 +230,124 @@ export const events: AivahEvent[] = [
                 }
             ]
         }
+    },
+    {
+        id: 6,
+        category: 'test',
+        title: 'Technical Test',
+        desc: 'This is a part of Zenix Event',
+        date: '28-02-2026',
+        time: '11:30 AM',
+        endDate: '28-02-2026',
+        endTime: '12:30 PM',
+        status: 'upcoming',
+        tag: 'Technical Test',
+        tagColor: 'from-teal-500 to-teal-600',
+        gradient: 'from-teal-500/10 to-teal-600/10',
+        image: '/zenix.jpeg',
+        registrationLink: 'https://placement-exam-rho.vercel.app/'
     }
 ]
 
-const EventCard: React.FC<{ event: AivahEvent; index: number; onClick: () => void }> = ({ event, index, onClick }) => (
-    <motion.div
-        layout
-        onClick={onClick}
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        transition={{ duration: 0.4, delay: index * 0.07 }}
-        className={event.detailedInfo ? "cursor-pointer" : ""}
-    >
-        <GlowCard
-            glowColor={event.status === 'upcoming' ? 'teal' : 'purple'}
-            className={`p-6 h-full flex flex-col relative overflow-hidden ${event.status === 'past' ? 'group' : ''}`}
+const EventCard: React.FC<{ event: AivahEvent; index: number; onClick: () => void }> = ({ event, index, onClick }) => {
+    const [now, setNow] = useState(() => new Date())
+    useEffect(() => {
+        const timer = setInterval(() => setNow(new Date()), 30_000)
+        return () => clearInterval(timer)
+    }, [])
+    const live = isEventLive(event, now)
+    return (
+        <motion.div
+            layout
+            onClick={onClick}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.4, delay: index * 0.07 }}
+            className={event.detailedInfo ? "cursor-pointer" : ""}
         >
-            {/* Background Image for Past Events */}
-            {event.image && (
-                <div className="absolute inset-0 z-0">
-                    <img
-                        src={event.image}
-                        alt={event.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-50"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0c1628] via-[#0c1628]/60 to-transparent" />
-                </div>
-            )}
+            <GlowCard
+                glowColor={event.status === 'upcoming' ? 'teal' : 'purple'}
+                className={`p-6 h-full flex flex-col relative overflow-hidden ${event.status === 'past' ? 'group' : ''}`}
+            >
+                {/* Background Image for Past Events */}
+                {event.image && (
+                    <div className="absolute inset-0 z-0">
+                        <img
+                            src={event.image}
+                            alt={event.title}
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-50"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0c1628] via-[#0c1628]/60 to-transparent" />
+                    </div>
+                )}
 
-            {/* Content Container (z-10 to stay above image) */}
-            <div className="relative z-10 flex flex-col h-full">
-                {/* Tag */}
-                <div className="flex items-start justify-between mb-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r ${event.tagColor} text-white shadow-lg`}>
-                        {event.tag}
-                    </span>
+                {/* Content Container (z-10 to stay above image) */}
+                <div className="relative z-10 flex flex-col h-full">
+                    {/* Tag */}
+                    <div className="flex items-start justify-between mb-4">
+                        {live ? (
+                            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-red-500 to-rose-600 text-white shadow-lg shadow-red-500/40 animate-pulse">
+                                <span className="w-1.5 h-1.5 rounded-full bg-white" />
+                                LIVE
+                            </span>
+                        ) : (
+                            <span className={`px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r ${event.tagColor} text-white shadow-lg`}>
+                                {event.tag}
+                            </span>
+                        )}
+                        {event.status === 'upcoming' && !live && (
+                            <span className="flex items-center gap-1.5 text-xs text-teal-400">
+                                <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />
+                                Upcoming
+                            </span>
+                        )}
+                        {live && (
+                            <span className="flex items-center gap-1.5 text-xs text-red-400 font-semibold">
+                                <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-ping" />
+                                Happening Now
+                            </span>
+                        )}
+                    </div>
+
+                    {/* Gradient accent */}
+                    <div className={`h-1 w-16 rounded-full bg-gradient-to-r ${event.gradient.replace('/20', '')} mb-4`} />
+
+                    <h3 className="font-display font-bold text-xl text-white mb-2 group-hover:gradient-text transition-all">
+                        {event.title}
+                    </h3>
+                    <p className="text-white/70 text-sm leading-relaxed mb-5 flex-1">{event.desc}</p>
+
+                    {/* Meta */}
+                    <div className="flex items-center gap-2 text-white/60 text-xs mb-4">
+                        <Calendar size={13} className="text-teal-400" />
+                        <span>{event.date}</span>
+                        {event.time && <><Clock size={13} className="text-purple-400 ml-2" /><span>{event.time}</span></>}
+                    </div>
+
+
                     {event.status === 'upcoming' && (
-                        <span className="flex items-center gap-1.5 text-xs text-teal-400">
-                            <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />
-                            Upcoming
-                        </span>
-                    )}
-                </div>
-
-                {/* Gradient accent */}
-                <div className={`h-1 w-16 rounded-full bg-gradient-to-r ${event.gradient.replace('/20', '')} mb-4`} />
-
-                <h3 className="font-display font-bold text-xl text-white mb-2 group-hover:gradient-text transition-all">
-                    {event.title}
-                </h3>
-                <p className="text-white/70 text-sm leading-relaxed mb-5 flex-1">{event.desc}</p>
-
-                {/* Meta */}
-                <div className="flex items-center gap-2 text-white/60 text-xs mb-4">
-                    <Calendar size={13} className="text-teal-400" />
-                    <span>{event.date}</span>
-                    {event.time && <><Clock size={13} className="text-purple-400 ml-2" /><span>{event.time}</span></>}
-                </div>
-
-
-                {event.status === 'upcoming' && (
-                    <motion.a
-                        href={event.registrationLink || '#'}
-                        target={event.registrationLink ? '_blank' : undefined}
-                        rel={event.registrationLink ? 'noopener noreferrer' : undefined}
-                        initial="initial"
-                        whileHover="hovered"
-                        variants={{ hovered: { scale: 1.02 } }}
-                        whileTap={{ scale: 0.98 }}
-                        className="w-full py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2
+                        <motion.a
+                            href={event.registrationLink || '#'}
+                            target={event.registrationLink ? '_blank' : undefined}
+                            rel={event.registrationLink ? 'noopener noreferrer' : undefined}
+                            initial="initial"
+                            whileHover="hovered"
+                            variants={{ hovered: { scale: 1.02 } }}
+                            whileTap={{ scale: 0.98 }}
+                            className="w-full py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2
                      bg-gradient-to-r from-teal-500/20 to-purple-500/20 border border-teal-500/30 text-teal-300
                      hover:from-teal-500/30 hover:to-purple-500/30 hover:border-teal-400/50 hover:shadow-[0_0_20px_rgba(255,79,216,0.3)]
                      transition-all duration-300"
-                    >
-                        <TextRoll>Register Now</TextRoll> <ArrowRight size={14} />
-                    </motion.a>
-                )}
-            </div>
-        </GlowCard>
-    </motion.div >
-)
+                        >
+                            <TextRoll>Register Now</TextRoll> <ArrowRight size={14} />
+                        </motion.a>
+                    )}
+                </div>
+            </GlowCard>
+        </motion.div>
+    )
+}
 
 const Events: React.FC = () => {
     const [activeCategory, setActiveCategory] = useState('all')

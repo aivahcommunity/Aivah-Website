@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
-import { ArrowRight, Users, Calendar, Building2, Sparkles } from 'lucide-react'
+import { ArrowRight, Users, Calendar, Building2, Sparkles, Bell, ExternalLink, Radio } from 'lucide-react'
 import AnimatedButton from '@/components/ui/AnimatedButton'
 import FlipText from '@/components/ui/FlipText'
 import PerspectiveGrid from '@/components/ui/PerspectiveGrid'
@@ -60,26 +60,42 @@ const Hero: React.FC = () => {
     const springX = useSpring(mouseX, { stiffness: 30, damping: 20 })
     const springY = useSpring(mouseY, { stiffness: 30, damping: 20 })
 
-    const upcomingEvent = events.find(e => {
-        if (e.status !== 'upcoming') return false;
+    const [now, setNow] = useState(() => new Date())
+    useEffect(() => {
+        const t = setInterval(() => setNow(new Date()), 30_000)
+        return () => clearInterval(t)
+    }, [])
 
-        // Parse dates like "Mar 5-6, 2026" to "Mar 5, 2026" and check against current date
-        const dateMatch = e.date.match(/([a-zA-Z]+)\s+(\d+)(?:-\d+)?(?:,\s*(\d{4}))?/);
-        if (dateMatch) {
-            const [, month, day, year] = dateMatch;
-            const eventYear = year || new Date().getFullYear();
-            const startDate = new Date(`${month} ${day}, ${eventYear} 00:00:00`);
-            return new Date() < startDate;
-        }
+    // Parse a date string to its start Date
+    function parseStart(dateStr: string): Date | null {
+        const dmy = dateStr.match(/^(\d{1,2})-(\d{2})-(\d{4})$/)
+        if (dmy) return new Date(+dmy[3], +dmy[2] - 1, +dmy[1])
+        const rng = dateStr.match(/^([A-Za-z]+)\s+(\d{1,2})[-–]?(\d{1,2})?,\s*(\d{4})$/)
+        if (rng) return new Date(`${rng[1]} ${rng[2]}, ${rng[4]}`)
+        const d = new Date(dateStr)
+        return isNaN(d.getTime()) ? null : d
+    }
 
-        // Fallback for normal dates
-        const date = new Date(e.date);
-        if (!isNaN(date.getTime())) {
-            return new Date() < date;
-        }
+    // Find the next upcoming event (nearest start date)
+    const upcomingEvent = events
+        .filter(e => e.status === 'upcoming')
+        .map(e => ({ e, start: parseStart(e.date) }))
+        .filter(({ start }) => start !== null)
+        .sort((a, b) => a.start!.getTime() - b.start!.getTime())
+        .find(({ start }) => start! >= new Date(now.getFullYear(), now.getMonth(), now.getDate()))?.e
 
-        return true;
-    })
+    // Dedicated announcement: the test event
+    const testEvent = events.find(e => e.id === 6)
+
+    const testEnd = new Date(2026, 1, 28, 12, 30, 59) // Feb 28 2026, 12:30 PM
+    const isTestOver = now > testEnd
+
+    // Check if test is live
+    const isTestLive = (() => {
+        if (!testEvent) return false
+        const start = new Date(2026, 1, 28, 11, 30, 0) // Feb 28 2026, 11:30 AM
+        return now >= start && now <= testEnd
+    })()
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -189,6 +205,74 @@ const Hero: React.FC = () => {
                         <ArrowRight size={18} />
                     </AnimatedButton>
                 </motion.div>
+
+                {/* Technical Test Announcement Banner */}
+                {testEvent && !isTestOver && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.85 }}
+                        className="pointer-events-auto mb-10 w-full max-w-lg mx-auto px-2 sm:px-0"
+                    >
+                        <div className={`relative rounded-2xl overflow-hidden border ${isTestLive
+                            ? 'border-red-500/50 shadow-[0_0_30px_rgba(239,68,68,0.25)]'
+                            : 'border-teal-500/30 shadow-[0_0_24px_rgba(28,167,199,0.15)]'
+                            }`}>
+                            {/* gradient bg */}
+                            <div className={`absolute inset-0 ${isTestLive
+                                ? 'bg-gradient-to-r from-red-950/80 via-rose-950/60 to-[#0c1628]/80'
+                                : 'bg-gradient-to-r from-teal-950/80 via-purple-950/60 to-[#0c1628]/80'
+                                } backdrop-blur-sm`} />
+
+                            <div className="relative flex flex-col sm:flex-row sm:items-center gap-3 px-4 py-3">
+                                {/* icon + text row */}
+                                <div className="flex items-center gap-3 flex-1 min-w-0">
+                                    {/* icon */}
+                                    <div className={`flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center ${isTestLive
+                                        ? 'bg-red-500/20'
+                                        : 'bg-teal-500/20'
+                                        }`}>
+                                        {isTestLive
+                                            ? <Radio size={18} className="text-red-400 animate-pulse" />
+                                            : <Bell size={18} className="text-teal-400 animate-bounce" />}
+                                    </div>
+
+                                    {/* text */}
+                                    <div className="flex-1 text-left min-w-0">
+                                        <div className="flex items-center gap-2 mb-0.5">
+                                            {isTestLive ? (
+                                                <span className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-red-400">
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-ping" />
+                                                    Live Now
+                                                </span>
+                                            ) : (
+                                                <span className="text-[10px] font-bold uppercase tracking-widest text-teal-400">📢 Announcement</span>
+                                            )}
+                                        </div>
+                                        <p className="text-white font-semibold text-sm truncate">
+                                            {testEvent.title} — Zenix Technical Test
+                                        </p>
+                                        <p className="text-white/50 text-xs mt-0.5">
+                                            Feb 28, 2026 &nbsp;·&nbsp; 11:30 AM – 12:30 PM
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* CTA */}
+                                <button
+                                    onClick={() => scrollToSection('events')}
+                                    className={`w-full sm:w-auto flex-shrink-0 flex items-center justify-center gap-1 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${isTestLive
+                                        ? 'bg-red-500/20 text-red-300 hover:bg-red-500/30 border border-red-500/30'
+                                        : 'bg-teal-500/20 text-teal-300 hover:bg-teal-500/30 border border-teal-500/30'
+                                        }`}
+                                >
+                                    {isTestLive ? 'Join Now' : 'View Event'}
+                                    <ArrowRight size={11} />
+                                </button>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
 
                 {/* Stats */}
                 <div ref={statsRef} className="grid grid-cols-2 gap-4 max-w-xl mx-auto">
