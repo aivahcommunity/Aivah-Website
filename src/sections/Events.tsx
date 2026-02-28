@@ -95,10 +95,32 @@ function parseEventEndDate(dateStr: string): Date | null {
 }
 
 /**
+ * Derives the effective status of an event based on the current time.
+ * If the event's end datetime has passed, returns 'past' automatically —
+ * regardless of the hardcoded `status` field.
+ */
+function getEffectiveStatus(event: AivahEvent, now: Date): 'upcoming' | 'past' {
+    const startDay = parseEventStartDate(event.date)
+    if (!startDay) return event.status // no parseable date → trust hardcoded value
+
+    // Build end datetime
+    const endDay = event.endDate ? parseEventStartDate(event.endDate) : parseEventEndDate(event.date)
+    const endDt = new Date(endDay ?? startDay)
+    if (event.endTime) {
+        const t = parseTime(event.endTime)
+        if (t) { endDt.setHours(t.hours, t.minutes, 59, 999) }
+    } else {
+        endDt.setHours(23, 59, 59, 999)
+    }
+
+    return now > endDt ? 'past' : 'upcoming'
+}
+
+/**
  * Returns true when `now` is within the event's live window.
  */
 function isEventLive(event: AivahEvent, now: Date): boolean {
-    if (event.status !== 'upcoming') return false
+    if (getEffectiveStatus(event, now) !== 'upcoming') return false
 
     const startDay = parseEventStartDate(event.date)
     if (!startDay) return false
@@ -249,12 +271,7 @@ export const events: AivahEvent[] = [
     }
 ]
 
-const EventCard: React.FC<{ event: AivahEvent; index: number; onClick: () => void }> = ({ event, index, onClick }) => {
-    const [now, setNow] = useState(() => new Date())
-    useEffect(() => {
-        const timer = setInterval(() => setNow(new Date()), 30_000)
-        return () => clearInterval(timer)
-    }, [])
+const EventCard: React.FC<{ event: AivahEvent; index: number; now: Date; onClick: () => void }> = ({ event, index, now, onClick }) => {
     const live = isEventLive(event, now)
     return (
         <motion.div
@@ -268,7 +285,7 @@ const EventCard: React.FC<{ event: AivahEvent; index: number; onClick: () => voi
         >
             <GlowCard
                 glowColor={event.status === 'upcoming' ? 'teal' : 'purple'}
-                className={`p-6 h-full flex flex-col relative overflow-hidden ${event.status === 'past' ? 'group' : ''}`}
+                className="p-6 h-full flex flex-col relative overflow-hidden"
             >
                 {/* Background Image for Past Events */}
                 {event.image && (
@@ -276,7 +293,8 @@ const EventCard: React.FC<{ event: AivahEvent; index: number; onClick: () => voi
                         <img
                             src={event.image}
                             alt={event.title}
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-50"
+                            className="w-full h-full object-cover opacity-50"
+                            loading="lazy"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-[#0c1628] via-[#0c1628]/60 to-transparent" />
                     </div>
@@ -352,13 +370,19 @@ const EventCard: React.FC<{ event: AivahEvent; index: number; onClick: () => voi
 const Events: React.FC = () => {
     const [activeCategory, setActiveCategory] = useState('all')
     const [selectedEvent, setSelectedEvent] = useState<AivahEvent | null>(null)
+    const [now, setNow] = useState(() => new Date())
+
+    useEffect(() => {
+        const timer = setInterval(() => setNow(new Date()), 30_000)
+        return () => clearInterval(timer)
+    }, [])
 
     const filtered = activeCategory === 'all'
         ? events
         : events.filter(e => e.category === activeCategory)
 
-    const upcoming = filtered.filter(e => e.status === 'upcoming')
-    const past = filtered.filter(e => e.status === 'past')
+    const upcoming = filtered.filter(e => getEffectiveStatus(e, now) === 'upcoming')
+    const past = filtered.filter(e => getEffectiveStatus(e, now) === 'past')
 
     return (
         <section id="events" className="relative bg-navy overflow-hidden">
@@ -407,7 +431,7 @@ const Events: React.FC = () => {
                         <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
                             <AnimatePresence mode="popLayout">
                                 {upcoming.map((event, i) => (
-                                    <EventCard key={event.id} event={event} index={i} onClick={() => event.detailedInfo && setSelectedEvent(event)} />
+                                    <EventCard key={event.id} event={event} index={i} now={now} onClick={() => event.detailedInfo && setSelectedEvent(event)} />
                                 ))}
                             </AnimatePresence>
                         </motion.div>
@@ -424,7 +448,7 @@ const Events: React.FC = () => {
                         <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             <AnimatePresence mode="popLayout">
                                 {past.map((event, i) => (
-                                    <EventCard key={event.id} event={event} index={i} onClick={() => event.detailedInfo && setSelectedEvent(event)} />
+                                    <EventCard key={event.id} event={event} index={i} now={now} onClick={() => event.detailedInfo && setSelectedEvent(event)} />
                                 ))}
                             </AnimatePresence>
                         </motion.div>
